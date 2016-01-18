@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -103,26 +103,25 @@ public class UIButtonColor : UIWidgetContainer
 
 	public void ResetDefaultColor () { defaultColor = mStartingColor; }
 
-	void Start () { if (!mInitDone) OnInit(); if (!isEnabled) SetState(State.Disabled, true); }
+	void Awake () { if (!mInitDone) OnInit(); }
+
+	void Start () { if (!isEnabled) SetState(State.Disabled, true); }
 
 	protected virtual void OnInit ()
 	{
 		mInitDone = true;
 		if (tweenTarget == null) tweenTarget = gameObject;
-		if (tweenTarget != null) mWidget = tweenTarget.GetComponent<UIWidget>();
+		mWidget = tweenTarget.GetComponent<UIWidget>();
 
 		if (mWidget != null)
 		{
 			mDefaultColor = mWidget.color;
 			mStartingColor = mDefaultColor;
 		}
-		else if (tweenTarget != null)
+		else
 		{
-#if UNITY_4_3 || UNITY_4_5 || UNITY_4_6
 			Renderer ren = tweenTarget.renderer;
-#else
-			Renderer ren = tweenTarget.GetComponent<Renderer>();
-#endif
+
 			if (ren != null)
 			{
 				mDefaultColor = Application.isPlaying ? ren.material.color : ren.sharedMaterial.color;
@@ -130,11 +129,8 @@ public class UIButtonColor : UIWidgetContainer
 			}
 			else
 			{
-#if UNITY_4_3 || UNITY_4_5 || UNITY_4_6
 				Light lt = tweenTarget.light;
-#else
-				Light lt = tweenTarget.GetComponent<Light>();
-#endif
+
 				if (lt != null)
 				{
 					mDefaultColor = lt.color;
@@ -272,11 +268,8 @@ public class UIButtonColor : UIWidgetContainer
 
 	protected virtual void OnSelect (bool isSelected)
 	{
-		if (isEnabled && tweenTarget != null)
-		{
-			if (UICamera.currentScheme == UICamera.ControlScheme.Controller) OnHover(isSelected);
-			else if (!isSelected && UICamera.CountInputSources() < 2) OnHover(isSelected);
-		}
+		if (isEnabled && (!isSelected || UICamera.currentScheme == UICamera.ControlScheme.Controller) && tweenTarget != null)
+			OnHover(isSelected);
 	}
 
 	/// <summary>
@@ -306,21 +299,18 @@ public class UIButtonColor : UIWidgetContainer
 	{
 		TweenColor tc;
 
-		if (tweenTarget != null)
+		switch (mState)
 		{
-			switch (mState)
-			{
-				case State.Hover: tc = TweenColor.Begin(tweenTarget, duration, hover); break;
-				case State.Pressed: tc = TweenColor.Begin(tweenTarget, duration, pressed); break;
-				case State.Disabled: tc = TweenColor.Begin(tweenTarget, duration, disabledColor); break;
-				default: tc = TweenColor.Begin(tweenTarget, duration, mDefaultColor); break;
-			}
+			case State.Hover: tc = TweenColor.Begin(tweenTarget, duration, hover); break;
+			case State.Pressed: tc = TweenColor.Begin(tweenTarget, duration, pressed); break;
+			case State.Disabled: tc = TweenColor.Begin(tweenTarget, duration, disabledColor); break;
+			default: tc = TweenColor.Begin(tweenTarget, duration, mDefaultColor); break;
+		}
 
-			if (instant && tc != null)
-			{
-				tc.value = tc.to;
-				tc.enabled = false;
-			}
+		if (instant && tc != null)
+		{
+			tc.value = tc.to;
+			tc.enabled = false;
 		}
 	}
 }

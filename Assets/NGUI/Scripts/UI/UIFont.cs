@@ -1,12 +1,12 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 // Dynamic font support contributed by the NGUI community members:
 // Unisip, zh4ox, Mudwiz, Nicki, DarkMagicCK.
 
-#if !UNITY_3_5
+#if !UNITY_3_5 && !UNITY_FLASH
 #define DYNAMIC_FONT
 #endif
 
@@ -123,14 +123,14 @@ public class UIFont : MonoBehaviour
 			}
 			else if (mAtlas != value)
 			{
-				mPMA = -1;
-				mAtlas = value;
-
-				if (mAtlas != null)
+				if (value == null)
 				{
-					mMat = mAtlas.spriteMaterial;
+					if (mAtlas != null) mMat = mAtlas.spriteMaterial;
 					if (sprite != null) mUVRect = uvRect;
 				}
+
+				mPMA = -1;
+				mAtlas = value;
 				MarkAsChanged();
 			}
 		}
@@ -480,7 +480,7 @@ public class UIFont : MonoBehaviour
 	static public bool CheckIfRelated (UIFont a, UIFont b)
 	{
 		if (a == null || b == null) return false;
-#if DYNAMIC_FONT && !UNITY_FLASH
+#if DYNAMIC_FONT
 		if (a.isDynamic && b.isDynamic && a.dynamicFont.fontNames[0] == b.dynamicFont.fontNames[0]) return true;
 #endif
 		return a == b || a.References(b) || b.References(a);

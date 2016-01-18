@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -75,12 +75,6 @@ public class UIPanel : UIRect
 	public bool anchorOffset = false;
 
 	/// <summary>
-	/// Whether the soft border will be used as padding.
-	/// </summary>
-
-	public bool softBorderPadding = true;
-
-	/// <summary>
 	/// By default all panels manage render queues of their draw calls themselves by incrementing them
 	/// so that the geometry is drawn in the proper order. You can alter this behaviour.
 	/// </summary>
@@ -130,9 +124,6 @@ public class UIPanel : UIRect
 
 	public OnClippingMoved onClipMove;
 
-	// Clip texture feature contributed by the community: http://www.tasharen.com/forum/index.php?topic=9268.0
-	[HideInInspector][SerializeField] Texture2D mClipTexture = null;
-
 	// Panel's alpha (affects the alpha of all widgets)
 	[HideInInspector][SerializeField] float mAlpha = 1f;
 
@@ -147,6 +138,7 @@ public class UIPanel : UIRect
 	bool mRebuild = false;
 	bool mResized = false;
 
+	Camera mCam;
 	[SerializeField] Vector2 mClipOffset = Vector2.zero;
 
 	float mCullTime = 0f;
@@ -291,11 +283,7 @@ public class UIPanel : UIRect
 	/// Whether the camera is used to draw UI geometry.
 	/// </summary>
 
-#if UNITY_4_3 || UNITY_4_5 || UNITY_4_6
-	public bool usedForUI { get { return (anchorCamera != null && mCam.isOrthoGraphic); } }
-#else
-	public bool usedForUI { get { return (anchorCamera != null && mCam.orthographic); } }
-#endif
+	public bool usedForUI { get { return (mCam != null && mCam.isOrthoGraphic); } }
 
 	/// <summary>
 	/// Directx9 pixel offset, used for drawing.
@@ -305,23 +293,11 @@ public class UIPanel : UIRect
 	{
 		get
 		{
-#if UNITY_4_3 || UNITY_4_5 || UNITY_4_6
-			if (anchorCamera != null && mCam.isOrthoGraphic)
-#else
-			if (anchorCamera != null && mCam.orthographic)
-#endif
+			if (mHalfPixelOffset && mCam != null && mCam.isOrthoGraphic)
 			{
 				Vector2 size = GetWindowSize();
-				float pixelSize = (root != null) ? root.pixelSizeAdjustment : 1f;
-				float mod = (pixelSize / size.y) / mCam.orthographicSize;
-
-				bool x = mHalfPixelOffset;
-				bool y = mHalfPixelOffset;
-
-				if ((Mathf.RoundToInt(size.x) & 1) == 1) x = !x;
-				if ((Mathf.RoundToInt(size.y) & 1) == 1) y = !y;
-
-				return new Vector3(x ? -mod : 0f, y ? mod : 0f);
+				float mod = (1f / size.y) / mCam.orthographicSize;
+				return new Vector3(-mod, mod);
 			}
 			return Vector3.zero;
 		}
@@ -372,7 +348,7 @@ public class UIPanel : UIRect
 
 			while (p != null)
 			{
-				if (p.mClipping == UIDrawCall.Clipping.SoftClip || p.mClipping == UIDrawCall.Clipping.TextureMask) ++count;
+				if (p.mClipping == UIDrawCall.Clipping.SoftClip) ++count;
 				p = p.mParentPanel;
 			}
 			return count;
@@ -383,7 +359,7 @@ public class UIPanel : UIRect
 	/// Whether the panel will actually perform clipping of children.
 	/// </summary>
 
-	public bool hasClipping { get { return mClipping == UIDrawCall.Clipping.SoftClip || mClipping == UIDrawCall.Clipping.TextureMask; } }
+	public bool hasClipping { get { return mClipping == UIDrawCall.Clipping.SoftClip; } }
 
 	/// <summary>
 	/// Whether the panel will actually perform clipping of children.
@@ -438,28 +414,6 @@ public class UIPanel : UIRect
 			UIPanel p = list[i];
 			if (p != this && p.parentPanel == this)
 				p.InvalidateClipping();
-		}
-	}
-
-	/// <summary>
-	/// Texture used to clip the region.
-	/// </summary>
-
-	public Texture2D clipTexture
-	{
-		get
-		{
-			return mClipTexture;
-		}
-		set
-		{
-			if (mClipTexture != value)
-			{
-				mClipTexture = value;
-#if UNITY_EDITOR
-				if (!Application.isPlaying) UpdateDrawCalls();
-#endif
-			}
 		}
 	}
 
@@ -610,20 +564,21 @@ public class UIPanel : UIRect
 				mCorners[2] = wt.TransformPoint(x1, y1, 0f);
 				mCorners[3] = wt.TransformPoint(x1, y0, 0f);
 			}
-			else if (anchorCamera != null)
-			{
-				Vector3[] corners = mCam.GetWorldCorners(cameraRayDistance);
-
-				//if (anchorOffset && (mCam == null || mCam.transform.parent != cachedTransform))
-				//{
-				//    Vector3 off = cachedTransform.position;
-				//    for (int i = 0; i < 4; ++i)
-				//        corners[i] += off;
-				//}
-				return corners;
-			}
 			else
 			{
+				if (mCam != null)
+				{
+					Vector3[] corners = mCam.GetWorldCorners();
+
+					if (anchorOffset)
+					{
+						Vector3 off = cachedTransform.position;
+						for (int i = 0; i < 4; ++i)
+							corners[i] += off;
+					}
+					return corners;
+				}
+
 				Vector2 size = GetViewSize();
 
 				float x0 = -0.5f * size.x;
@@ -636,7 +591,7 @@ public class UIPanel : UIRect
 				mCorners[2] = new Vector3(x1, y1);
 				mCorners[3] = new Vector3(x1, y0);
 
-				if (anchorOffset && (mCam == null || mCam.transform.parent != cachedTransform))
+				if (anchorOffset)
 				{
 					Vector3 off = cachedTransform.position;
 					for (int i = 0; i < 4; ++i)
@@ -677,9 +632,9 @@ public class UIPanel : UIRect
 			}
 			return mSides;
 		}
-		else if (anchorCamera != null && anchorOffset)
+		else if (anchorOffset)
 		{
-			Vector3[] sides = mCam.GetSides(cameraRayDistance);
+			Vector3[] sides = mCam.GetSides();
 			Vector3 off = cachedTransform.position;
 			for (int i = 0; i < 4; ++i)
 				sides[i] += off;
@@ -763,27 +718,16 @@ public class UIPanel : UIRect
 	/// Returns whether the specified rectangle is visible by the panel. The coordinates must be in world space.
 	/// </summary>
 
-#if UNITY_FLASH
-	public bool IsVisible (Vector3 aa, Vector3 bb, Vector3 cc, Vector3 dd)
-#else
 	public bool IsVisible (Vector3 a, Vector3 b, Vector3 c, Vector3 d)
-#endif
 	{
 		UpdateTransformMatrix();
 
 		// Transform the specified points from world space to local space
-#if UNITY_FLASH
-		// http://www.tasharen.com/forum/index.php?topic=11390.0
-		Vector3 a = worldToLocal.MultiplyPoint3x4(aa);
-		Vector3 b = worldToLocal.MultiplyPoint3x4(bb);
-		Vector3 c = worldToLocal.MultiplyPoint3x4(cc);
-		Vector3 d = worldToLocal.MultiplyPoint3x4(dd);
-#else
 		a = worldToLocal.MultiplyPoint3x4(a);
 		b = worldToLocal.MultiplyPoint3x4(b);
 		c = worldToLocal.MultiplyPoint3x4(c);
 		d = worldToLocal.MultiplyPoint3x4(d);
-#endif
+
 		mTemp[0] = a.x;
 		mTemp[1] = b.x;
 		mTemp[2] = c.x;
@@ -908,8 +852,7 @@ public class UIPanel : UIRect
 			Application.platform == RuntimePlatform.WindowsEditor);
 
 		// Only DirectX 9 needs the half-pixel offset
-		if (mHalfPixelOffset && SystemInfo.graphicsDeviceVersion.Contains("Direct3D"))
-			mHalfPixelOffset = (SystemInfo.graphicsShaderLevel < 40);
+		if (mHalfPixelOffset) mHalfPixelOffset = (SystemInfo.graphicsShaderLevel < 40);
 	}
 
 	/// <summary>
@@ -939,6 +882,8 @@ public class UIPanel : UIRect
 	protected override void OnStart ()
 	{
 		mLayer = mGo.layer;
+		UICamera uic = UICamera.FindCameraForLayer(mLayer);
+		mCam = (uic != null) ? uic.cachedCamera : NGUITools.FindCameraForLayer(mLayer);
 	}
 
 	/// <summary>
@@ -961,18 +906,12 @@ public class UIPanel : UIRect
 
 	protected override void OnInit ()
 	{
-		if (list.Contains(this)) return;
 		base.OnInit();
-		FindParent();
 
 		// Apparently having a rigidbody helps
-#if UNITY_4_3 || UNITY_4_5 || UNITY_4_6
-		if (rigidbody == null && mParentPanel == null)
-#else
-		if (GetComponent<Rigidbody>() == null && mParentPanel == null)
-#endif
+		if (rigidbody == null)
 		{
-			UICamera uic = (anchorCamera != null) ? mCam.GetComponent<UICamera>() : null;
+			UICamera uic = (mCam != null) ? mCam.GetComponent<UICamera>() : null;
 
 			if (uic != null)
 			{
@@ -992,6 +931,7 @@ public class UIPanel : UIRect
 			}
 		}
 
+		FindParent();
 		mRebuild = true;
 		mAlphaFrameID = -1;
 		mMatrixFrame = -1;
@@ -1295,7 +1235,6 @@ public class UIPanel : UIRect
 		Texture tex = null;
 		Shader sdr = null;
 		UIDrawCall dc = null;
-		int count = 0;
 
 		if (mSortWidgets) SortWidgets();
 
@@ -1314,10 +1253,7 @@ public class UIPanel : UIRect
 					if (dc != null && dc.verts.size != 0)
 					{
 						drawCalls.Add(dc);
-						dc.UpdateGeometry(count);
-						dc.onRender = mOnRender;
-						mOnRender = null;
-						count = 0;
+						dc.UpdateGeometry();
 						dc = null;
 					}
 
@@ -1344,15 +1280,8 @@ public class UIPanel : UIRect
 
 					w.drawCall = dc;
 
-					++count;
 					if (generateNormals) w.WriteToBuffers(dc.verts, dc.uvs, dc.cols, dc.norms, dc.tans);
 					else w.WriteToBuffers(dc.verts, dc.uvs, dc.cols, null, null);
-
-					if (w.mOnRender != null)
-					{
-						if (mOnRender == null) mOnRender = w.mOnRender;
-						else mOnRender += w.mOnRender;
-					}
 				}
 			}
 			else w.drawCall = null;
@@ -1361,13 +1290,9 @@ public class UIPanel : UIRect
 		if (dc != null && dc.verts.size != 0)
 		{
 			drawCalls.Add(dc);
-			dc.UpdateGeometry(count);
-			dc.onRender = mOnRender;
-			mOnRender = null;
+			dc.UpdateGeometry();
 		}
 	}
-
-	UIDrawCall.OnRenderCallback mOnRender;
 
 	/// <summary>
 	/// Fill the geometry for the specified draw call.
@@ -1378,7 +1303,6 @@ public class UIPanel : UIRect
 		if (dc != null)
 		{
 			dc.isDirty = false;
-			int count = 0;
 
 			for (int i = 0; i < widgets.Count; )
 			{
@@ -1397,16 +1321,8 @@ public class UIPanel : UIRect
 				{
 					if (w.isVisible && w.hasVertices)
 					{
-						++count;
-						
 						if (generateNormals) w.WriteToBuffers(dc.verts, dc.uvs, dc.cols, dc.norms, dc.tans);
 						else w.WriteToBuffers(dc.verts, dc.uvs, dc.cols, null, null);
-
-						if (w.mOnRender != null)
-						{
-							if (mOnRender == null) mOnRender = w.mOnRender;
-							else mOnRender += w.mOnRender;
-						}
 					}
 					else w.drawCall = null;
 				}
@@ -1415,9 +1331,7 @@ public class UIPanel : UIRect
 
 			if (dc.verts.size != 0)
 			{
-				dc.UpdateGeometry(count);
-				dc.onRender = mOnRender;
-				mOnRender = null;
+				dc.UpdateGeometry();
 				return true;
 			}
 		}
@@ -1441,12 +1355,9 @@ public class UIPanel : UIRect
 		}
 		else drawCallClipRange = Vector4.zero;
 
-		int w = Screen.width;
-		int h = Screen.height;
-
 		// Legacy functionality
-		if (drawCallClipRange.z == 0f) drawCallClipRange.z = w * 0.5f;
-		if (drawCallClipRange.w == 0f) drawCallClipRange.w = h * 0.5f;
+		if (drawCallClipRange.z == 0f) drawCallClipRange.z = Screen.width * 0.5f;
+		if (drawCallClipRange.w == 0f) drawCallClipRange.w = Screen.height * 0.5f;
 
 		// DirectX 9 half-pixel offset
 		if (halfPixelOffset)
@@ -1457,18 +1368,25 @@ public class UIPanel : UIRect
 
 		Vector3 pos;
 
+		// We want the position to always be on even pixels so that the
+		// panel's contents always appear pixel-perfect.
 		if (isUI)
 		{
 			Transform parent = cachedTransform.parent;
 			pos = cachedTransform.localPosition;
 
-			if (clipping != UIDrawCall.Clipping.None)
+			if (parent != null)
 			{
-				pos.x = Mathf.RoundToInt(pos.x);
-				pos.y = Mathf.RoundToInt(pos.y);
-			}
+				float x = Mathf.Round(pos.x);
+				float y = Mathf.Round(pos.y);
 
-			if (parent != null) pos = parent.TransformPoint(pos);
+				drawCallClipRange.x += pos.x - x;
+				drawCallClipRange.y += pos.y - y;
+
+				pos.x = x;
+				pos.y = y;
+				pos = parent.TransformPoint(pos);
+			}
 			pos += drawCallOffset;
 		}
 		else pos = trans.position;
@@ -1489,7 +1407,6 @@ public class UIPanel : UIRect
 			dc.alwaysOnScreen = alwaysOnScreen &&
 				(mClipping == UIDrawCall.Clipping.None || mClipping == UIDrawCall.Clipping.ConstrainButDontClip);
 			dc.sortingOrder = mSortingOrder;
-			dc.clipTexture = mClipTexture;
 		}
 	}
 
@@ -1503,14 +1420,9 @@ public class UIPanel : UIRect
 		if (mLayer != cachedGameObject.layer)
 		{
 			mLayer = mGo.layer;
-
-			for (int i = 0, imax = widgets.Count; i < imax; ++i)
-			{
-				UIWidget w = widgets[i];
-				if (w && w.parent == this) w.gameObject.layer = mLayer;
-			}
-
-			ResetAnchors();
+			UICamera uic = UICamera.FindCameraForLayer(mLayer);
+			mCam = (uic != null) ? uic.cachedCamera : NGUITools.FindCameraForLayer(mLayer);
+			NGUITools.SetChildLayer(cachedTransform, mLayer);
 
 			for (int i = 0; i < drawCalls.Count; ++i)
 				drawCalls[i].gameObject.layer = mLayer;
@@ -1713,13 +1625,10 @@ public class UIPanel : UIRect
 	public void Refresh ()
 	{
 		mRebuild = true;
-		mUpdateFrame = -1;
 		if (list.Count > 0) list[0].LateUpdate();
 	}
 
-	
-
-	// <summary>
+	/// <summary>
 	/// Calculate the offset needed to be constrained within the panel's bounds.
 	/// </summary>
 
@@ -1735,12 +1644,12 @@ public class UIPanel : UIRect
 		Vector2 minArea = new Vector2(cr.x - offsetX, cr.y - offsetY);
 		Vector2 maxArea = new Vector2(cr.x + offsetX, cr.y + offsetY);
 
-		if (softBorderPadding && clipping == UIDrawCall.Clipping.SoftClip)
+		if (clipping == UIDrawCall.Clipping.SoftClip)
 		{
-			minArea.x += mClipSoftness.x;
-			minArea.y += mClipSoftness.y;
-			maxArea.x -= mClipSoftness.x;
-			maxArea.y -= mClipSoftness.y;
+			minArea.x += clipSoftness.x;
+			minArea.y += clipSoftness.y;
+			maxArea.x -= clipSoftness.x;
+			maxArea.y -= clipSoftness.y;
 		}
 		return NGUIMath.ConstrainRect(minRect, maxRect, minArea, maxArea);
 	}
@@ -1751,24 +1660,7 @@ public class UIPanel : UIRect
 
 	public bool ConstrainTargetToBounds (Transform target, ref Bounds targetBounds, bool immediate)
 	{
-		Vector3 min = targetBounds.min;
-		Vector3 max = targetBounds.max;
-
-		float ps = 1f;
-
-		if (mClipping == UIDrawCall.Clipping.None)
-		{
-			UIRoot rt = root;
-			if (rt != null) ps = rt.pixelSizeAdjustment;
-		}
-
-		if (ps != 1f)
-		{
-			min /= ps;
-			max /= ps;
-		}
-
-		Vector3 offset = CalculateConstrainOffset(min, max) * ps;
+		Vector3 offset = CalculateConstrainOffset(targetBounds.min, targetBounds.max);
 
 		if (offset.sqrMagnitude > 0f)
 		{
@@ -1818,9 +1710,15 @@ public class UIPanel : UIRect
 
 	static public UIPanel Find (Transform trans, bool createIfMissing, int layer)
 	{
-		UIPanel panel = NGUITools.FindInParents<UIPanel>(trans);
-		if (panel != null) return panel;
-		while (trans.parent != null) trans = trans.parent;
+		UIPanel panel = null;
+
+		while (panel == null && trans != null)
+		{
+			panel = trans.GetComponent<UIPanel>();
+			if (panel != null) return panel;
+			if (trans.parent == null) break;
+			trans = trans.parent;
+		}
 		return createIfMissing ? NGUITools.CreateUI(trans, false, layer) : null;
 	}
 
@@ -1828,7 +1726,7 @@ public class UIPanel : UIRect
 	/// Get the size of the game window in pixels.
 	/// </summary>
 
-	public Vector2 GetWindowSize ()
+	Vector2 GetWindowSize ()
 	{
 		UIRoot rt = root;
 		Vector2 size = NGUITools.screenSize;
@@ -1858,7 +1756,7 @@ public class UIPanel : UIRect
 
 	void OnDrawGizmos ()
 	{
-		if (anchorCamera == null) return;
+		if (mCam == null) return;
 
 		bool clip = (mClipping != UIDrawCall.Clipping.None);
 		Transform t = clip ? transform : mCam.transform;
@@ -1871,53 +1769,21 @@ public class UIPanel : UIRect
 		GameObject go = UnityEditor.Selection.activeGameObject;
 		bool isUsingThisPanel = (go != null) && (NGUITools.FindInParents<UIPanel>(go) == this);
 		bool isSelected = (UnityEditor.Selection.activeGameObject == gameObject);
-		bool detailedView = (isSelected && isUsingThisPanel);
-		bool detailedClipped = detailedView && mClipping == UIDrawCall.Clipping.SoftClip;
+		bool detailedView = (isSelected && isUsingThisPanel && mClipping == UIDrawCall.Clipping.SoftClip);
 
+		Gizmos.color = (isUsingThisPanel && !detailedView) ? new Color(1f, 0f, 0.5f) : new Color(0.5f, 0f, 0.5f);
 		Gizmos.matrix = t.localToWorldMatrix;
-
-#if UNITY_4_3 || UNITY_4_5 || UNITY_4_6
-		if (isUsingThisPanel && !clip && mCam.isOrthoGraphic)
-#else
-		if (isUsingThisPanel && !clip && mCam.orthographic)
-#endif
-		{
-			UIRoot rt = root;
-
-			if (rt != null && rt.scalingStyle != UIRoot.Scaling.Flexible)
-			{
-				float width = rt.manualWidth;
-				float height = rt.manualHeight;
-
-				float x0 = -0.5f * width;
-				float y0 = -0.5f * height;
-				float x1 = x0 + width;
-				float y1 = y0 + height;
-
-				corners[0] = new Vector3(x0, y0);
-				corners[1] = new Vector3(x0, y1);
-				corners[2] = new Vector3(x1, y1);
-				corners[3] = new Vector3(x1, y0);
-
-				Vector3 szPos = Vector3.Lerp(corners[0], corners[2], 0.5f);
-				Vector3 szSize = corners[2] - corners[0];
-
-				Gizmos.color = new Color(0f, 0.75f, 1f);
-				Gizmos.DrawWireCube(szPos, szSize);
-			}
-		}
-		Gizmos.color = (isUsingThisPanel && !detailedClipped) ? new Color(1f, 0f, 0.5f) : new Color(0.5f, 0f, 0.5f);
 		Gizmos.DrawWireCube(pos, size);
 
 		if (detailedView)
 		{
-			if (detailedClipped)
-			{
-				Gizmos.color = new Color(1f, 0f, 0.5f);
-				size.x -= mClipSoftness.x * 2f;
-				size.y -= mClipSoftness.y * 2f;
-				Gizmos.DrawWireCube(pos, size);
-			}
+			//UIRoot rt = root;
+			//float scale = (rt != null) ? rt.pixelSizeAdjustment : 1f;
+
+			Gizmos.color = new Color(1f, 0f, 0.5f);
+			size.x -= mClipSoftness.x * 2f;// *scale;
+			size.y -= mClipSoftness.y * 2f;// *scale;
+			Gizmos.DrawWireCube(pos, size);
 		}
 	}
 #endif // UNITY_EDITOR

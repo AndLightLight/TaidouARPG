@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -22,7 +22,6 @@ public class UISavedOption : MonoBehaviour
 
 	UIPopupList mList;
 	UIToggle mCheck;
-	UIProgressBar mSlider;
 
 	/// <summary>
 	/// Cache the components and register a listener callback.
@@ -31,8 +30,7 @@ public class UISavedOption : MonoBehaviour
 	void Awake ()
 	{
 		mList = GetComponent<UIPopupList>();
-		mCheck = GetComponent<UIToggle>();
-		mSlider = GetComponent<UIProgressBar>();
+		mCheck = GetComponent<UIToggle>();	
 	}
 
 	/// <summary>
@@ -41,21 +39,19 @@ public class UISavedOption : MonoBehaviour
 
 	void OnEnable ()
 	{
+		if (mList != null) EventDelegate.Add(mList.onChange, SaveSelection);
+		if (mCheck != null) EventDelegate.Add(mCheck.onChange, SaveState);
+
 		if (mList != null)
 		{
-			EventDelegate.Add(mList.onChange, SaveSelection);
 			string s = PlayerPrefs.GetString(key);
 			if (!string.IsNullOrEmpty(s)) mList.value = s;
+			return;
 		}
-		else if (mCheck != null)
+
+		if (mCheck != null)
 		{
-			EventDelegate.Add(mCheck.onChange, SaveState);
-			mCheck.value = (PlayerPrefs.GetInt(key, mCheck.startsActive ? 1 : 0) != 0);
-		}
-		else if (mSlider != null)
-		{
-			EventDelegate.Add(mSlider.onChange, SaveProgress);
-			mSlider.value = PlayerPrefs.GetFloat(key, mSlider.value);
+			mCheck.value = (PlayerPrefs.GetInt(key, 1) != 0);
 		}
 		else
 		{
@@ -77,9 +73,9 @@ public class UISavedOption : MonoBehaviour
 	void OnDisable ()
 	{
 		if (mCheck != null) EventDelegate.Remove(mCheck.onChange, SaveState);
-		else if (mList != null) EventDelegate.Remove(mList.onChange, SaveSelection);
-		else if (mSlider != null) EventDelegate.Remove(mSlider.onChange, SaveProgress);
-		else
+		if (mList != null) EventDelegate.Remove(mList.onChange, SaveSelection);
+
+		if (mCheck == null && mList == null)
 		{
 			UIToggle[] toggles = GetComponentsInChildren<UIToggle>(true);
 
@@ -107,10 +103,4 @@ public class UISavedOption : MonoBehaviour
 	/// </summary>
 
 	public void SaveState () { PlayerPrefs.SetInt(key, UIToggle.current.value ? 1 : 0); }
-
-	/// <summary>
-	/// Save the current progress.
-	/// </summary>
-
-	public void SaveProgress () { PlayerPrefs.SetFloat(key, UIProgressBar.current.value); }
 }

@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -10,12 +10,6 @@ using UnityEditor;
 [CustomEditor(typeof(UICamera))]
 public class UICameraEditor : Editor
 {
-	enum EventsGo
-	{
-		Colliders,
-		Rigidbodies,
-	}
-
 	public override void OnInspectorGUI ()
 	{
 		UICamera cam = target as UICamera;
@@ -56,23 +50,7 @@ public class UICameraEditor : Editor
 			SerializedProperty controller = serializedObject.FindProperty("useController");
 
 			EditorGUILayout.PropertyField(serializedObject.FindProperty("eventReceiverMask"), new GUIContent("Event Mask"));
-
-			SerializedProperty ev = serializedObject.FindProperty("eventsGoToColliders");
-
-			if (ev != null)
-			{
-				bool val = ev.boolValue;
-				bool newVal = EventsGo.Colliders == (EventsGo)EditorGUILayout.EnumPopup("Events go to...",
-					ev.boolValue ? EventsGo.Colliders : EventsGo.Rigidbodies);
-				if (val != newVal) ev.boolValue = newVal;
-			}
-
 			EditorGUILayout.PropertyField(serializedObject.FindProperty("debug"));
-
-			GUILayout.BeginHorizontal();
-			EditorGUILayout.PropertyField(serializedObject.FindProperty("commandClick"), GUILayout.Width(140f));
-			GUILayout.Label("= Right-Click on OSX", GUILayout.MinWidth(30f));
-			GUILayout.EndHorizontal();
 
 			EditorGUI.BeginDisabledGroup(!mouse.boolValue && !touch.boolValue);
 			{
@@ -81,18 +59,14 @@ public class UICameraEditor : Editor
 			EditorGUI.EndDisabledGroup();
 
 			EditorGUI.BeginDisabledGroup(!mouse.boolValue);
-			EditorGUILayout.PropertyField(serializedObject.FindProperty("stickyTooltip"));
-			EditorGUI.EndDisabledGroup();
+			{
+				EditorGUILayout.PropertyField(serializedObject.FindProperty("stickyTooltip"));
 
-			GUILayout.BeginHorizontal();
-			EditorGUILayout.PropertyField(serializedObject.FindProperty("longPressTooltip"));
-			GUILayout.EndHorizontal();
-
-			EditorGUI.BeginDisabledGroup(!mouse.boolValue);
-			GUILayout.BeginHorizontal();
-			EditorGUILayout.PropertyField(serializedObject.FindProperty("tooltipDelay"));
-			GUILayout.Label("seconds", GUILayout.MinWidth(60f));
-			GUILayout.EndHorizontal();
+				GUILayout.BeginHorizontal();
+				EditorGUILayout.PropertyField(serializedObject.FindProperty("tooltipDelay"));
+				GUILayout.Label("seconds", GUILayout.MinWidth(60f));
+				GUILayout.EndHorizontal();
+			}
 			EditorGUI.EndDisabledGroup();
 
 			GUILayout.BeginHorizontal();

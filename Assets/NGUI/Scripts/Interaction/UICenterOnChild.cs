@@ -1,10 +1,9 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
-using System.Collections.Generic;
 
 /// <summary>
 /// Ever wanted to be able to auto-center on an object within a draggable panel?
@@ -49,9 +48,13 @@ public class UICenterOnChild : MonoBehaviour
 
 	public GameObject centeredObject { get { return mCenteredObject; } }
 
-	void Start () { Recenter(); }
-	void OnEnable () { if (mScrollView) { mScrollView.centerOnChild = this; Recenter(); } }
-	void OnDisable () { if (mScrollView) mScrollView.centerOnChild = null; }
+	void OnEnable ()
+	{
+		Recenter();
+		if (mScrollView) mScrollView.onDragFinished = OnDragFinished;
+	}
+	
+	void OnDisable () { if (mScrollView) mScrollView.onDragFinished -= OnDragFinished; }
 	void OnDragFinished () { if (enabled) Recenter(); }
 
 	/// <summary>
@@ -79,17 +82,13 @@ public class UICenterOnChild : MonoBehaviour
 			}
 			else
 			{
-				if (mScrollView)
-				{
-					mScrollView.centerOnChild = this;
-					mScrollView.onDragFinished += OnDragFinished;
-				}
+				mScrollView.onDragFinished = OnDragFinished;
 
 				if (mScrollView.horizontalScrollBar != null)
-					mScrollView.horizontalScrollBar.onDragFinished += OnDragFinished;
+					mScrollView.horizontalScrollBar.onDragFinished = OnDragFinished;
 
 				if (mScrollView.verticalScrollBar != null)
-					mScrollView.verticalScrollBar.onDragFinished += OnDragFinished;
+					mScrollView.verticalScrollBar.onDragFinished = OnDragFinished;
 			}
 		}
 		if (mScrollView.panel == null) return;
@@ -104,15 +103,15 @@ public class UICenterOnChild : MonoBehaviour
 		// Offset this value by the momentum
 		Vector3 momentum = mScrollView.currentMomentum * mScrollView.momentumAmount;
 		Vector3 moveDelta = NGUIMath.SpringDampen(ref momentum, 9f, 2f);
-		Vector3 pickingPoint = panelCenter - moveDelta * 0.01f; // Magic number based on what "feels right"
+		Vector3 pickingPoint = panelCenter - moveDelta * 0.05f; // Magic number based on what "feels right"
+		mScrollView.currentMomentum = Vector3.zero;
 
 		float min = float.MaxValue;
 		Transform closest = null;
 		int index = 0;
-		int ignoredIndex = 0;
 
 		// Determine the closest child
-		for (int i = 0, imax = trans.childCount, ii = 0; i < imax; ++i)
+		for (int i = 0, imax = trans.childCount; i < imax; ++i)
 		{
 			Transform t = trans.GetChild(i);
 			if (!t.gameObject.activeInHierarchy) continue;
@@ -123,9 +122,7 @@ public class UICenterOnChild : MonoBehaviour
 				min = sqrDist;
 				closest = t;
 				index = i;
-				ignoredIndex = ii;
 			}
-			++ii;
 		}
 
 		// If we have a touch in progress and the next page threshold set
@@ -134,8 +131,7 @@ public class UICenterOnChild : MonoBehaviour
 			// If we're still on the same object
 			if (mCenteredObject != null && mCenteredObject.transform == trans.GetChild(index))
 			{
-				Vector3 totalDelta = UICamera.currentTouch.totalDelta;
-				totalDelta = transform.rotation * totalDelta;
+				Vector2 totalDelta = UICamera.currentTouch.totalDelta;
 
 				float delta = 0f;
 
@@ -158,31 +154,21 @@ public class UICenterOnChild : MonoBehaviour
 					}
 				}
 
-				if (Mathf.Abs(delta) > nextPageThreshold)
+				if (delta > nextPageThreshold)
 				{
-					UIGrid grid = GetComponent<UIGrid>();
-
-					if (grid != null && grid.sorting != UIGrid.Sorting.None)
-					{
-						List<Transform> list = grid.GetChildList();
-
-						if (delta > nextPageThreshold)
-						{
-							// Next page
-							if (ignoredIndex > 0) closest = list[ignoredIndex - 1];
-							else closest = (GetComponent<UIWrapContent>() == null) ? list[0] : list[list.Count - 1];
-						}
-						else if (delta < -nextPageThreshold)
-						{
-							// Previous page
-							if (ignoredIndex < list.Count - 1) closest = list[ignoredIndex + 1];
-							else closest = (GetComponent<UIWrapContent>() == null) ? list[list.Count - 1] : list[0];
-						}
-					}
-					else Debug.LogWarning("Next Page Threshold requires a sorted UIGrid in order to work properly", this);
+					// Next page
+					if (index > 0)
+						closest = trans.GetChild(index - 1);
+				}
+				else if (delta < -nextPageThreshold)
+				{
+					// Previous page
+					if (index < trans.childCount - 1)
+						closest = trans.GetChild(index + 1);
 				}
 			}
 		}
+
 		CenterOn(closest, panelCenter);
 	}
 

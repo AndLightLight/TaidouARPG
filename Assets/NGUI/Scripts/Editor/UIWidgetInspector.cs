@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -116,11 +116,7 @@ public class UIWidgetInspector : UIRectEditor
 
 		Vector2 screenPoint = HandleUtility.WorldToGUIPoint(point);
 
-#if UNITY_4_3 || UNITY_4_5 || UNITY_4_6
 		Rect rect = new Rect(screenPoint.x - 7f, screenPoint.y - 7f, 14f, 14f);
-#else
-		Rect rect = new Rect(screenPoint.x - 5f, screenPoint.y - 9f, 14f, 14f);
-#endif
 
 		if (selected)
 		{
@@ -260,35 +256,39 @@ public class UIWidgetInspector : UIRectEditor
 		}
 
 		// Change the mouse cursor to a more appropriate one
-		Vector2[] screenPos = new Vector2[8];
-		for (int i = 0; i < 8; ++i) screenPos[i] = HandleUtility.WorldToGUIPoint(worldPos[i]);
-
-		Bounds b = new Bounds(screenPos[0], Vector3.zero);
-		for (int i = 1; i < 8; ++i) b.Encapsulate(screenPos[i]);
-
-		Vector2 min = b.min;
-		Vector2 max = b.max;
-
-		min.x -= 30f;
-		max.x += 30f;
-		min.y -= 30f;
-		max.y += 30f;
-
-		Rect rect = new Rect(min.x, min.y, max.x - min.x, max.y - min.y);
-
-		if (action == Action.Rotate)
+#if !UNITY_3_5
 		{
-			SetCursorRect(rect, MouseCursor.RotateArrow);
+			Vector2[] screenPos = new Vector2[8];
+			for (int i = 0; i < 8; ++i) screenPos[i] = HandleUtility.WorldToGUIPoint(worldPos[i]);
+
+			Bounds b = new Bounds(screenPos[0], Vector3.zero);
+			for (int i = 1; i < 8; ++i) b.Encapsulate(screenPos[i]);
+
+			Vector2 min = b.min;
+			Vector2 max = b.max;
+
+			min.x -= 30f;
+			max.x += 30f;
+			min.y -= 30f;
+			max.y += 30f;
+
+			Rect rect = new Rect(min.x, min.y, max.x - min.x, max.y - min.y);
+
+			if (action == Action.Rotate)
+			{
+				SetCursorRect(rect, MouseCursor.RotateArrow);
+			}
+			else if (action == Action.Move)
+			{
+				SetCursorRect(rect, MouseCursor.MoveArrow);
+			}
+			else if (action == Action.Scale)
+			{
+				SetCursorRect(rect, MouseCursor.ScaleArrow);
+			}
+			else SetCursorRect(rect, MouseCursor.Arrow);
 		}
-		else if (action == Action.Move)
-		{
-			SetCursorRect(rect, MouseCursor.MoveArrow);
-		}
-		else if (action == Action.Scale)
-		{
-			SetCursorRect(rect, MouseCursor.ScaleArrow);
-		}
-		else SetCursorRect(rect, MouseCursor.Arrow);
+#endif
 		return pivotUnderMouse;
 	}
 
@@ -334,14 +334,9 @@ public class UIWidgetInspector : UIRectEditor
 		{
 			sides = anchor.rect.worldCorners;
 		}
-		else
+		else if (anchor.target.camera != null)
 		{
-#if UNITY_4_3 || UNITY_4_5 || UNITY_4_6
-			Camera cam = anchor.target.camera;
-#else
-			Camera cam = anchor.target.GetComponent<Camera>();
-#endif
-			if (cam != null) sides = cam.GetWorldCorners();
+			sides = anchor.target.camera.GetWorldCorners();
 		}
 
 		Vector3 theirPos;
@@ -375,11 +370,7 @@ public class UIWidgetInspector : UIRectEditor
 		if (Event.current.GetTypeForControl(id) == EventType.Repaint)
 		{
 			Vector2 screenPoint = HandleUtility.WorldToGUIPoint(theirPos);
-#if UNITY_4_3 || UNITY_4_5 || UNITY_4_6
 			Rect rect = new Rect(screenPoint.x - 7f, screenPoint.y - 7f, 14f, 14f);
-#else
-			Rect rect = new Rect(screenPoint.x - 5f, screenPoint.y - 9f, 14f, 14f);
-#endif
 			if (mYellowDot == null) mYellowDot = "sv_label_4";
 
 			Vector3 v0 = HandleUtility.WorldToGUIPoint(myPos);
@@ -432,7 +423,6 @@ public class UIWidgetInspector : UIRectEditor
 
 	public void OnSceneGUI ()
 	{
-		if (Selection.objects.Length > 1) return;
 		NGUIEditorTools.HideMoveTool(true);
 		if (!UIWidget.showHandles) return;
 
@@ -653,28 +643,9 @@ public class UIWidgetInspector : UIRectEditor
 								{
 									// Move the widget
 									t.position = mWorldPos + (pos - mStartDrag);
-									Vector3 after = t.localPosition;
 
-									bool snapped = false;
-									Transform parent = t.parent;
-
-									if (parent != null)
-									{
-										UIGrid grid = parent.GetComponent<UIGrid>();
-
-										if (grid != null && grid.arrangement == UIGrid.Arrangement.CellSnap)
-										{
-											snapped = true;
-											if (grid.cellWidth > 0) after.x = Mathf.Round(after.x / grid.cellWidth) * grid.cellWidth;
-											if (grid.cellHeight > 0) after.y = Mathf.Round(after.y / grid.cellHeight) * grid.cellHeight;
-										}
-									}
-
-									if (!snapped)
-									{
-										// Snap the widget
-										after = NGUISnap.Snap(after, mWidget.localCorners, e.modifiers != EventModifiers.Control);
-									}
+									// Snap the widget
+									Vector3 after = NGUISnap.Snap(t.localPosition, mWidget.localCorners, e.modifiers != EventModifiers.Control);
 
 									// Calculate the final delta
 									Vector3 localDelta = (after - mLocalPos);

@@ -290,15 +290,7 @@ public abstract class UIBasicSprite : UIWidget
 		{
 			Color colF = color;
 			colF.a = finalAlpha;
-			if (premultipliedAlpha) colF = NGUITools.ApplyPMA(colF);
-
-			if (QualitySettings.activeColorSpace == ColorSpace.Linear)
-			{
-				colF.r = Mathf.GammaToLinearSpace(colF.r);
-				colF.g = Mathf.GammaToLinearSpace(colF.g);
-				colF.b = Mathf.GammaToLinearSpace(colF.b);
-			}
-			return colF;
+			return premultipliedAlpha ? NGUITools.ApplyPMA(colF) : colF;
 		}
 	}
 
@@ -890,7 +882,7 @@ public abstract class UIBasicSprite : UIWidget
 							tileStartX += tileSize.x;
 						}
 					}
-					else if ((y == 0 && bottomType != AdvancedType.Invisible) || (y == 2 && topType != AdvancedType.Invisible))
+					else if ((y == 0 && bottomType == AdvancedType.Sliced) || (y == 2 && topType == AdvancedType.Sliced))
 					{
 						Fill(verts, uvs, cols,
 							mTempPos[x].x, mTempPos[x2].x,
@@ -932,7 +924,7 @@ public abstract class UIBasicSprite : UIWidget
 							tileStartY += tileSize.y;
 						}
 					}
-					else if ((x == 0 && leftType != AdvancedType.Invisible) || (x == 2 && rightType != AdvancedType.Invisible))
+					else if ((x == 0 && leftType == AdvancedType.Sliced) || (x == 2 && rightType == AdvancedType.Sliced))
 					{
 						Fill(verts, uvs, cols,
 							mTempPos[x].x, mTempPos[x2].x,
@@ -943,15 +935,11 @@ public abstract class UIBasicSprite : UIWidget
 				}
 				else // Corner
 				{
-					if ((y == 0 && bottomType != AdvancedType.Invisible) || (y == 2 && topType != AdvancedType.Invisible) ||
-						(x == 0 && leftType != AdvancedType.Invisible) || (x == 2 && rightType != AdvancedType.Invisible))
-					{
-						Fill(verts, uvs, cols,
-							mTempPos[x].x, mTempPos[x2].x,
-							mTempPos[y].y, mTempPos[y2].y,
-							mTempUVs[x].x, mTempUVs[x2].x,
-							mTempUVs[y].y, mTempUVs[y2].y, c);
-					}
+					Fill(verts, uvs, cols,
+						mTempPos[x].x, mTempPos[x2].x,
+						mTempPos[y].y, mTempPos[y2].y,
+						mTempUVs[x].x, mTempUVs[x2].x,
+						mTempUVs[y].y, mTempUVs[y2].y, c);
 				}
 			}
 		}

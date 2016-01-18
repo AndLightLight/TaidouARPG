@@ -1,7 +1,6 @@
-
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 //#define SHOW_HIDDEN_OBJECTS
@@ -38,17 +37,14 @@ public class UIDrawCall : MonoBehaviour
 	public enum Clipping : int
 	{
 		None = 0,
-		TextureMask = 1,			// Clipped using a texture rather than math
 		SoftClip = 3,				// Alpha-based clipping with a softened edge
 		ConstrainButDontClip = 4,	// No actual clipping, but does have an area
 	}
 
-	[HideInInspector][System.NonSerialized] public int widgetCount = 0;
 	[HideInInspector][System.NonSerialized] public int depthStart = int.MaxValue;
 	[HideInInspector][System.NonSerialized] public int depthEnd = int.MinValue;
 	[HideInInspector][System.NonSerialized] public UIPanel manager;
 	[HideInInspector][System.NonSerialized] public UIPanel panel;
-	[HideInInspector][System.NonSerialized] public Texture2D clipTexture;
 	[HideInInspector][System.NonSerialized] public bool alwaysOnScreen = false;
 	[HideInInspector][System.NonSerialized] public BetterList<Vector3> verts = new BetterList<Vector3>();
 	[HideInInspector][System.NonSerialized] public BetterList<Vector3> norms = new BetterList<Vector3>();
@@ -56,7 +52,7 @@ public class UIDrawCall : MonoBehaviour
 	[HideInInspector][System.NonSerialized] public BetterList<Vector2> uvs = new BetterList<Vector2>();
 	[HideInInspector][System.NonSerialized] public BetterList<Color32> cols = new BetterList<Color32>();
 
-	Material		mMaterial;		// Material used by this draw call
+	Material		mMaterial;		// Material used by this screen
 	Texture			mTexture;		// Main texture used by the material
 	Shader			mShader;		// Shader used by the dynamically created material
 	int				mClipCount = 0;	// Number of times the draw call's content is getting clipped
@@ -78,17 +74,6 @@ public class UIDrawCall : MonoBehaviour
 
 	[System.NonSerialized]
 	public bool isDirty = false;
-
-	[System.NonSerialized]
-	bool mTextureClip = false;
-
-	public delegate void OnRenderCallback (Material mat);
-
-	/// <summary>
-	/// Callback that will be triggered at OnWillRenderObject() time.
-	/// </summary>
-
-	public OnRenderCallback onRender;
 
 	/// <summary>
 	/// Render queue used by the draw call.
@@ -255,7 +240,6 @@ public class UIDrawCall : MonoBehaviour
 
 	void CreateMaterial ()
 	{
-		mTextureClip = false;
 		mLegacyShader = false;
 		mClipCount = panel.clipCount;
 
@@ -281,18 +265,10 @@ public class UIDrawCall : MonoBehaviour
 		const string soft = " (SoftClip)";
 		shaderName = shaderName.Replace(soft, "");
 
-		const string textureClip = " (TextureClip)";
-		shaderName = shaderName.Replace(textureClip, "");
-
-		if (panel.clipping == Clipping.TextureMask)
-		{
-			mTextureClip = true;
-			shader = Shader.Find("Hidden/" + shaderName + textureClip);
-		}
-		else if (mClipCount != 0)
+		if (mClipCount != 0)
 		{
 			shader = Shader.Find("Hidden/" + shaderName + " " + mClipCount);
-			if (shader == null) shader = Shader.Find(shaderName + " " + mClipCount);
+			if (shader == null) Shader.Find(shaderName + " " + mClipCount);
 
 			// Legacy functionality
 			if (shader == null && mClipCount == 1)
@@ -303,13 +279,9 @@ public class UIDrawCall : MonoBehaviour
 		}
 		else shader = Shader.Find(shaderName);
 
-		// Always fallback to the default shader
-		if (shader == null) shader = Shader.Find("Unlit/Transparent Colored");
-
 		if (mMaterial != null)
 		{
 			mDynamicMat = new Material(mMaterial);
-			mDynamicMat.name = "[NGUI] " + mMaterial.name;
 			mDynamicMat.hideFlags = HideFlags.DontSave | HideFlags.NotEditable;
 			mDynamicMat.CopyPropertiesFromMaterial(mMaterial);
 #if !UNITY_FLASH
@@ -330,7 +302,6 @@ public class UIDrawCall : MonoBehaviour
 		else
 		{
 			mDynamicMat = new Material(shader);
-			mDynamicMat.name = "[NGUI] " + shader.name;
 			mDynamicMat.hideFlags = HideFlags.DontSave | HideFlags.NotEditable;
 		}
 	}
@@ -363,7 +334,7 @@ public class UIDrawCall : MonoBehaviour
 	void UpdateMaterials ()
 	{
 		// If clipping should be used, we need to find a replacement shader
-		if (mRebuildMat || mDynamicMat == null || mClipCount != panel.clipCount || mTextureClip != (panel.clipping == Clipping.TextureMask))
+		if (mRebuildMat || mDynamicMat == null || mClipCount != panel.clipCount)
 		{
 			RebuildMaterial();
 			mRebuildMat = false;
@@ -381,9 +352,8 @@ public class UIDrawCall : MonoBehaviour
 	/// Set the draw call's geometry.
 	/// </summary>
 
-	public void UpdateGeometry (int widgetCount)
+	public void UpdateGeometry ()
 	{
-		this.widgetCount = widgetCount;
 		int count = verts.size;
 
 		// Safety check to ensure we get valid values
@@ -404,7 +374,7 @@ public class UIDrawCall : MonoBehaviour
 				{
 					mMesh = new Mesh();
 					mMesh.hideFlags = HideFlags.DontSave;
-					mMesh.name = (mMaterial != null) ? "[NGUI] " + mMaterial.name : "[NGUI] Mesh";
+					mMesh.name = (mMaterial != null) ? mMaterial.name : "Mesh";
 					mMesh.MarkDynamic();
 					setIndices = true;
 				}
@@ -567,22 +537,9 @@ public class UIDrawCall : MonoBehaviour
 	{
 		UpdateMaterials();
 
-		if (onRender != null) onRender(mDynamicMat ?? mMaterial);
 		if (mDynamicMat == null || mClipCount == 0) return;
 
-		if (mTextureClip)
-		{
-			Vector4 cr = panel.drawCallClipRange;
-			Vector2 soft = panel.clipSoftness;
-
-			Vector2 sharpness = new Vector2(1000.0f, 1000.0f);
-			if (soft.x > 0f) sharpness.x = cr.z / soft.x;
-			if (soft.y > 0f) sharpness.y = cr.w / soft.y;
-
-			mDynamicMat.SetVector(ClipRange[0], new Vector4(-cr.x / cr.z, -cr.y / cr.w, 1f / cr.z, 1f / cr.w));
-			mDynamicMat.SetTexture("_ClipTex", clipTexture);
-		}
-		else if (!mLegacyShader)
+		if (!mLegacyShader)
 		{
 			UIPanel currentPanel = panel;
 
@@ -637,9 +594,21 @@ public class UIDrawCall : MonoBehaviour
 		}
 	}
 
-	static int[] ClipRange = null;
-	static int[] ClipArgs = null;
+	static int[] ClipRange =
+	{
+		Shader.PropertyToID("_ClipRange0"),
+		Shader.PropertyToID("_ClipRange1"),
+		Shader.PropertyToID("_ClipRange2"),
+		Shader.PropertyToID("_ClipRange4"),
+	};
 
+	static int[] ClipArgs =
+	{
+		Shader.PropertyToID("_ClipArgs0"),
+		Shader.PropertyToID("_ClipArgs1"),
+		Shader.PropertyToID("_ClipArgs2"),
+		Shader.PropertyToID("_ClipArgs3"),
+	};
 	/// <summary>
 	/// Set the shader clipping parameters.
 	/// </summary>
@@ -656,35 +625,6 @@ public class UIDrawCall : MonoBehaviour
 		{
 			mDynamicMat.SetVector(ClipRange[index], new Vector4(-cr.x / cr.z, -cr.y / cr.w, 1f / cr.z, 1f / cr.w));
 			mDynamicMat.SetVector(ClipArgs[index], new Vector4(sharpness.x, sharpness.y, Mathf.Sin(angle), Mathf.Cos(angle)));
-		}
-	}
-
-	/// <summary>
-	/// Cache the property IDs.
-	/// </summary>
-
-	void Awake ()
-	{
-		if (ClipRange == null)
-		{
-			ClipRange = new int[]
-			{
-				Shader.PropertyToID("_ClipRange0"),
-				Shader.PropertyToID("_ClipRange1"),
-				Shader.PropertyToID("_ClipRange2"),
-				Shader.PropertyToID("_ClipRange4"),
-			};
-		}
-
-		if (ClipArgs == null)
-		{
-			ClipArgs = new int[]
-			{
-				Shader.PropertyToID("_ClipArgs0"),
-				Shader.PropertyToID("_ClipArgs1"),
-				Shader.PropertyToID("_ClipArgs2"),
-				Shader.PropertyToID("_ClipArgs3"),
-			};
 		}
 	}
 
@@ -706,13 +646,11 @@ public class UIDrawCall : MonoBehaviour
 		manager = null;
 		mMaterial = null;
 		mTexture = null;
-		clipTexture = null;
-
-		if (mRenderer != null)
-			mRenderer.sharedMaterials = new Material[] {};
 
 		NGUITools.DestroyImmediate(mDynamicMat);
 		mDynamicMat = null;
+		if (mRenderer != null)
+			mRenderer.sharedMaterials = new Material[] {};
 	}
 
 	/// <summary>
@@ -722,7 +660,6 @@ public class UIDrawCall : MonoBehaviour
 	void OnDestroy ()
 	{
 		NGUITools.DestroyImmediate(mMesh);
-		mMesh = null;
 	}
 
 	/// <summary>
@@ -861,8 +798,6 @@ public class UIDrawCall : MonoBehaviour
 	{
 		if (dc)
 		{
-			dc.onRender = null;
-
 			if (Application.isPlaying)
 			{
 				if (mActiveList.Remove(dc))

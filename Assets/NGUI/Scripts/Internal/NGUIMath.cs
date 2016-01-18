@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -428,7 +428,7 @@ static public class NGUIMath
 	/// Calculate the combined bounds of all widgets attached to the specified game object or its children (in relative-to-object space).
 	/// </summary>
 
-	static public Bounds CalculateRelativeWidgetBounds (Transform relativeTo, Transform content, bool considerInactive, bool considerParents = true)
+	static public Bounds CalculateRelativeWidgetBounds (Transform relativeTo, Transform content, bool considerInactive)
 	{
 		if (content != null && relativeTo != null)
 		{
@@ -436,7 +436,7 @@ static public class NGUIMath
 			Matrix4x4 toLocal = relativeTo.worldToLocalMatrix;
 			Vector3 min = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
 			Vector3 max = new Vector3(float.MinValue, float.MinValue, float.MinValue);
-			CalculateRelativeWidgetBounds(content, considerInactive, true, ref toLocal, ref min, ref max, ref isSet, considerParents);
+			CalculateRelativeWidgetBounds(content, considerInactive, true, ref toLocal, ref min, ref max, ref isSet);
 
 			if (isSet)
 			{
@@ -455,7 +455,7 @@ static public class NGUIMath
 	[System.Diagnostics.DebuggerHidden]
 	[System.Diagnostics.DebuggerStepThrough]
 	static void CalculateRelativeWidgetBounds (Transform content, bool considerInactive, bool isRoot,
-		ref Matrix4x4 toLocal, ref Vector3 vMin, ref Vector3 vMax, ref bool isSet, bool considerParents)
+		ref Matrix4x4 toLocal, ref Vector3 vMin, ref Vector3 vMax, ref bool isSet)
 	{
 		if (content == null) return;
 		if (!considerInactive && !NGUITools.GetActive(content.gameObject)) return;
@@ -509,12 +509,11 @@ static public class NGUIMath
 
 					isSet = true;
 				}
-
-				if (!considerParents) return;
 			}
-			
+
+			// Iterate through children including their bounds in turn
 			for (int i = 0, imax = content.childCount; i < imax; ++i)
-				CalculateRelativeWidgetBounds(content.GetChild(i), considerInactive, false, ref toLocal, ref vMin, ref vMax, ref isSet, true);
+				CalculateRelativeWidgetBounds(content.GetChild(i), considerInactive, false, ref toLocal, ref vMin, ref vMax, ref isSet);
 		}
 	}
 
@@ -1038,7 +1037,7 @@ static public class NGUIMath
 			dpi = (platform == RuntimePlatform.Android || platform == RuntimePlatform.IPhonePlayer) ? 160f : 96f;
 #if UNITY_BLACKBERRY
 			if (platform == RuntimePlatform.BB10Player) dpi = 160f;
-#elif UNITY_WP8 || UNITY_WP_8_1
+#elif UNITY_WP8
 			if (platform == RuntimePlatform.WP8Player) dpi = 160f;
 #endif
 		}

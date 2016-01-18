@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -207,9 +207,12 @@ public abstract class UITweener : MonoBehaviour
 			mFactor = Mathf.Clamp01(mFactor);
 			Sample(mFactor, true);
 
+			// Disable this script unless the function calls above changed something
+			if (duration == 0f || (mFactor == 1f && mAmountPerDelta > 0f || mFactor == 0f && mAmountPerDelta < 0f))
+				enabled = false;
+
 			if (current == null)
 			{
-				UITweener before = current;
 				current = this;
 
 				if (onFinished != null)
@@ -224,7 +227,7 @@ public abstract class UITweener : MonoBehaviour
 					for (int i = 0; i < mTemp.Count; ++i)
 					{
 						EventDelegate ed = mTemp[i];
-						if (ed != null && !ed.oneShot) EventDelegate.Add(onFinished, ed, ed.oneShot);
+						if (ed != null) EventDelegate.Add(onFinished, ed, ed.oneShot);
 					}
 					mTemp = null;
 				}
@@ -233,12 +236,8 @@ public abstract class UITweener : MonoBehaviour
 				if (eventReceiver != null && !string.IsNullOrEmpty(callWhenFinished))
 					eventReceiver.SendMessage(callWhenFinished, this, SendMessageOptions.DontRequireReceiver);
 
-				current = before;
+				current = null;
 			}
-
-			// Disable this script unless the function calls above changed something
-			if (duration == 0f || (mFactor == 1f && mAmountPerDelta > 0f || mFactor == 0f && mAmountPerDelta < 0f))
-				enabled = false;
 		}
 		else Sample(mFactor, false);
 	}
@@ -451,16 +450,7 @@ public abstract class UITweener : MonoBehaviour
 			}
 		}
 
-		if (comp == null)
-		{
-			comp = go.AddComponent<T>();
-
-			if (comp == null)
-			{
-				Debug.LogError("Unable to add " + typeof(T) + " to " + NGUITools.GetHierarchy(go), go);
-				return null;
-			}
-		}
+		if (comp == null) comp = go.AddComponent<T>();
 #endif
 		comp.mStarted = false;
 		comp.duration = duration;
@@ -471,6 +461,12 @@ public abstract class UITweener : MonoBehaviour
 		comp.eventReceiver = null;
 		comp.callWhenFinished = null;
 		comp.enabled = true;
+
+		if (duration <= 0f)
+		{
+			comp.Sample(1f, true);
+			comp.enabled = false;
+		}
 		return comp;
 	}
 

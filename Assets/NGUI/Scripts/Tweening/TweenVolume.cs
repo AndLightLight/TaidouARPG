@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -33,7 +33,7 @@ public class TweenVolume : UITweener
 		{
 			if (mSource == null)
 			{
-				mSource = GetComponent<AudioSource>();
+				mSource = audio;
 				
 				if (mSource == null)
 				{

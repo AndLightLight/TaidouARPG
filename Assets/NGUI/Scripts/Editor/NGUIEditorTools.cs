@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEditor;
@@ -441,12 +441,18 @@ public static class NGUIEditorTools
 		TextureImporterSettings settings = new TextureImporterSettings();
 		ti.ReadTextureSettings(settings);
 
-		if (force || !settings.readable || settings.npotScale != TextureImporterNPOTScale.None || settings.alphaIsTransparency)
+		if (force || !settings.readable || settings.npotScale != TextureImporterNPOTScale.None
+#if !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_1
+			|| settings.alphaIsTransparency
+#endif
+			)
 		{
 			settings.readable = true;
-			if (NGUISettings.trueColorAtlas) settings.textureFormat = TextureImporterFormat.AutomaticTruecolor;
+			if (NGUISettings.trueColorAtlas) settings.textureFormat = TextureImporterFormat.ARGB32;
 			settings.npotScale = TextureImporterNPOTScale.None;
+#if !UNITY_3_5 && !UNITY_4_0 && !UNITY_4_1
 			settings.alphaIsTransparency = false;
+#endif
 			ti.SetTextureSettings(settings);
 			AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate | ImportAssetOptions.ForceSynchronousImport);
 		}
@@ -1600,7 +1606,6 @@ public static class NGUIEditorTools
 			for (int b = 0; b < p.widgets.Count; ++b)
 			{
 				UIWidget w = p.widgets[b];
-				if (!w.isVisible) continue;
 				Vector3[] corners = w.worldCorners;
 				if (SceneViewDistanceToRectangle(corners, mousePos) == 0f)
 					list.Add(w);
@@ -1706,12 +1711,7 @@ public static class NGUIEditorTools
 	static public void HideMoveTool (bool hide)
 	{
 #if !UNITY_4_3
-		UnityEditor.Tools.hidden = hide &&
- #if !UNITY_4_5
-			(UnityEditor.Tools.current == UnityEditor.Tool.Rect) &&
- #else
-			(UnityEditor.Tools.current == UnityEditor.Tool.Move) &&
- #endif
+		UnityEditor.Tools.hidden = hide && (UnityEditor.Tools.current == UnityEditor.Tool.Move) &&
 			UIWidget.showHandlesWithMoveTool && !NGUISettings.showTransformHandles;
 #endif
 	}

@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -16,8 +16,6 @@ public class UISnapshotPoint : MonoBehaviour
 	[Range(10, 80)]
 	public int fieldOfView = 35;
 	public float orthoSize = 30f;
-
-	public Texture2D thumbnail;
 
 	void Start () { if (tag != "EditorOnly") tag = "EditorOnly"; }
 }

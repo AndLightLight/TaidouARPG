@@ -80,11 +80,11 @@ public abstract class UIItemSlot : MonoBehaviour
 				}
 
 				if (!string.IsNullOrEmpty(bi.description)) t += "\n[FF9900]" + bi.description;
-				UITooltip.Show(t);
+				UITooltip.ShowText(t);
 				return;
 			}
 		}
-		UITooltip.Hide();
+		UITooltip.ShowText(null);
 	}
 
 	/// <summary>

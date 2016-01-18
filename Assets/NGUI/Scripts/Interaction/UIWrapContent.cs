@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -145,7 +145,6 @@ public class UIWrapContent : MonoBehaviour
 		{
 			Transform t = mChildren[i];
 			t.localPosition = mHorizontal ? new Vector3(i * itemSize, 0f, 0f) : new Vector3(0f, -i * itemSize, 0f);
-			UpdateItem(t, i);
 		}
 	}
 
@@ -190,6 +189,7 @@ public class UIWrapContent : MonoBehaviour
 					{
 						t.localPosition = pos;
 						UpdateItem(t, i);
+						t.name = realIndex.ToString();
 					}
 					else allWithinRange = false;
 				}
@@ -204,6 +204,7 @@ public class UIWrapContent : MonoBehaviour
 					{
 						t.localPosition = pos;
 						UpdateItem(t, i);
+						t.name = realIndex.ToString();
 					}
 					else allWithinRange = false;
 				}
@@ -238,6 +239,7 @@ public class UIWrapContent : MonoBehaviour
 					{
 						t.localPosition = pos;
 						UpdateItem(t, i);
+						t.name = realIndex.ToString();
 					}
 					else allWithinRange = false;
 				}
@@ -252,6 +254,7 @@ public class UIWrapContent : MonoBehaviour
 					{
 						t.localPosition = pos;
 						UpdateItem(t, i);
+						t.name = realIndex.ToString();
 					}
 					else allWithinRange = false;
 				}
@@ -264,8 +267,8 @@ public class UIWrapContent : MonoBehaviour
 						NGUITools.SetActive(t.gameObject, (distance > min && distance < max), false);
 				}
 			}
+			mScroll.restrictWithinPanel = !allWithinRange;
 		}
-		mScroll.restrictWithinPanel = !allWithinRange;
 	}
 
 	/// <summary>

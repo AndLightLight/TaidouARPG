@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -20,17 +20,20 @@ public class UIPlaySound : MonoBehaviour
 		OnPress,
 		OnRelease,
 		Custom,
-		OnEnable,
-		OnDisable,
 	}
 
 	public AudioClip audioClip;
 	public Trigger trigger = Trigger.OnClick;
 
+	bool mIsOver = false;
+
+#if UNITY_3_5
+	public float volume = 1f;
+	public float pitch = 1f;
+#else
 	[Range(0f, 1f)] public float volume = 1f;
 	[Range(0f, 2f)] public float pitch = 1f;
-
-	bool mIsOver = false;
+#endif
 
 	bool canPlay
 	{
@@ -40,18 +43,6 @@ public class UIPlaySound : MonoBehaviour
 			UIButton btn = GetComponent<UIButton>();
 			return (btn == null || btn.isEnabled);
 		}
-	}
-
-	void OnEnable ()
-	{
-		if (trigger == Trigger.OnEnable)
-			NGUITools.PlaySound(audioClip, volume, pitch);
-	}
-
-	void OnDisable ()
-	{
-		if (trigger == Trigger.OnDisable)
-			NGUITools.PlaySound(audioClip, volume, pitch);
 	}
 
 	void OnHover (bool isOver)

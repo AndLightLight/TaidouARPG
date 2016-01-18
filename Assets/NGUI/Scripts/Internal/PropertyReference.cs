@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 #if UNITY_EDITOR || !UNITY_FLASH
@@ -236,19 +236,8 @@ public class PropertyReference
 		{
 			try
 			{
-				if (mProperty != null)
-				{
-					if (mProperty.CanWrite)
-					{
-						mProperty.SetValue(mTarget, null, null);
-						return true;
-					}
-				}
-				else
-				{
-					mField.SetValue(mTarget, null);
-					return true;
-				}
+				if (mProperty != null) mProperty.SetValue(mTarget, null, null);
+				else mField.SetValue(mTarget, null);
 			}
 			catch (Exception) { return false; }
 		}

@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 using System;
@@ -282,11 +282,7 @@ static public class FreeType
 		public int y;
 	}
 	
-#if UNITY_4_3 || UNITY_4_5 || UNITY_4_6
 	const string libName = "FreeType";
-#else
-	const string libName = "FreeType64";
-#endif
 	static bool mFound = false;
 
 	/// <summary>
@@ -309,31 +305,26 @@ static public class FreeType
 					mFound = File.Exists(path);
 					if (mFound) LoadLibrary(path);
 				}
+				else if (File.Exists("/usr/local/lib/FreeType.dylib"))
+				{
+					mFound = true;
+				}
 				else
 				{
-					string filename = libName + ".dylib";
-
-					if (File.Exists("/usr/local/lib/" + filename))
+					string path = NGUISettings.pathToFreeType;
+					
+					if (File.Exists(path))
 					{
-						mFound = true;
-					}
-					else
-					{
-						string path = NGUISettings.pathToFreeType;
-
-						if (File.Exists(path))
+						try
 						{
-							try
-							{
-								if (!System.IO.Directory.Exists("/usr/local/lib"))
-									System.IO.Directory.CreateDirectory("/usr/local/lib");
-								UnityEditor.FileUtil.CopyFileOrDirectory(path, "/usr/local/lib/" + filename);
-								mFound = true;
-							}
-							catch (Exception ex)
-							{
-								Debug.LogWarning("Unable to copy " + filename + " to /usr/local/lib:\n" + ex.Message);
-							}
+							if (!System.IO.Directory.Exists("/usr/local/lib"))
+								System.IO.Directory.CreateDirectory("/usr/local/lib");
+							UnityEditor.FileUtil.CopyFileOrDirectory(path, "/usr/local/lib/FreeType.dylib");
+							mFound = true;
+						}
+						catch (Exception ex)
+						{
+							Debug.LogWarning("Unable to copy FreeType.dylib to /usr/local/lib:\n" + ex.Message);
 						}
 					}
 				}
@@ -469,7 +460,7 @@ static public class FreeType
 	/// Create a bitmap font from the specified dynamic font.
 	/// </summary>
 
-	static public bool CreateFont (Font ttf, int size, int faceIndex, bool kerning, string characters, int padding, out BMFont font, out Texture2D tex)
+	static public bool CreateFont (Font ttf, int size, int faceIndex, string characters, out BMFont font, out Texture2D tex)
 	{
 		font = null;
 		tex = null;
@@ -532,19 +523,16 @@ static public class FreeType
 			spaceGlyph.height = 0;
 
 			// Save kerning information
-			if (kerning)
+			for (int b = 0; b < characters.Length; ++b)
 			{
-				for (int b = 0; b < characters.Length; ++b)
-				{
-					uint ch2 = characters[b];
-					if (ch2 == 32) continue;
+				uint ch2 = characters[b];
+				if (ch2 == 32) continue;
 
-					FT_Vector vec;
-					if (FT_Get_Kerning(face, ch2, 32, 0, out vec) != 0) continue;
+				FT_Vector vec;
+				if (FT_Get_Kerning(face, ch2, 32, 0, out vec) != 0) continue;
 
-					int offset = (vec.x >> 6);
-					if (offset != 0) spaceGlyph.SetKerning((int)ch2, offset);
-				}
+				int offset = (vec.x >> 6);
+				if (offset != 0) spaceGlyph.SetKerning((int)ch2, offset);
 			}
 
 			// Run through all requested characters
@@ -586,26 +574,23 @@ static public class FreeType
 					bmg.channel = 15;
 
 					// Save kerning information
-					if (kerning)
+					for (int b = 0; b < characters.Length; ++b)
 					{
-						for (int b = 0; b < characters.Length; ++b)
-						{
-							uint ch2 = characters[b];
-							if (ch2 == ch) continue;
+						uint ch2 = characters[b];
+						if (ch2 == ch) continue;
 
-							FT_Vector vec;
-							if (FT_Get_Kerning(face, ch2, ch, 0, out vec) != 0) continue;
+						FT_Vector vec;
+						if (FT_Get_Kerning(face, ch2, ch, 0, out vec) != 0) continue;
 
-							int offset = (vec.x >> 6);
-							if (offset != 0) bmg.SetKerning((int)ch2, offset);
-						}
+						int offset = (vec.x / 64);
+						if (offset != 0) bmg.SetKerning((int)ch2, offset);
 					}
 				}
 			}
 
 			// Create a packed texture with all the characters
 			tex = new Texture2D(32, 32, TextureFormat.ARGB32, false);
-			Rect[] rects = tex.PackTextures(textures.ToArray(), padding);
+			Rect[] rects = tex.PackTextures(textures.ToArray(), 1);
 
 			// Make the RGB channel pure white
 			Color32[] cols = tex.GetPixels32();

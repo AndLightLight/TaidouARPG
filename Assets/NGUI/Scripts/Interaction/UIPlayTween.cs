@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2015 Tasharen Entertainment
+// Copyright © 2011-2014 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -140,8 +140,6 @@ public class UIPlayTween : MonoBehaviour
 		UIToggle toggle = GetComponent<UIToggle>();
 		if (toggle != null) EventDelegate.Remove(toggle.onChange, OnToggle);
 	}
-
-	void OnDragOver () { if (trigger == Trigger.OnHover) OnHover(true); }
 
 	void OnHover (bool isOver)
 	{
@@ -311,11 +309,7 @@ public class UIPlayTween : MonoBehaviour
 					}
 					else
 					{
-						if (resetOnPlay || (resetIfDisabled && !tw.enabled))
-						{
-							tw.Play(forward);
-							tw.ResetToBeginning();
-						}
+						if (resetOnPlay || (resetIfDisabled && !tw.enabled)) tw.ResetToBeginning();
 						// Listen for tween finished messages
 						EventDelegate.Add(tw.onFinished, OnFinished, true);
 						tw.Play(forward);
