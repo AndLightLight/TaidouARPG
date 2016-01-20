@@ -159,8 +159,8 @@ public class NcParticleEmit : NcEffectBehaviour
 		// PrefabAdjustSpeed - unsupported
 		// m_bDetachParent - unsupported
 
-		if (m_CreateGameObject.particleEmitter != null)
-			 m_CreateGameObject.particleEmitter.Emit(m_EmitCount);
+		if (m_CreateGameObject.GetComponent<ParticleEmitter>() != null)
+			 m_CreateGameObject.GetComponent<ParticleEmitter>().Emit(m_EmitCount);
 // 			 m_CreateGameObject.particleEmitter.Emit(newPos, Vector3.zero, 1, 1, Color.white);
 		else {
 			if (m_ps == null)

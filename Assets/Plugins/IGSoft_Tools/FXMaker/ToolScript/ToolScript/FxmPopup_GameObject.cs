@@ -230,7 +230,7 @@ public class FxmPopup_GameObject : FxmPopup
 
 	void AddScript(string scriptName)
 	{
-		Component com = m_SelectedTransform.gameObject.AddComponent(scriptName);
+		Component com = UnityEngineInternal.APIUpdaterRuntimeServices.AddComponent(m_SelectedTransform.gameObject, "Assets/Plugins/IGSoft_Tools/FXMaker/ToolScript/ToolScript/FxmPopup_GameObject.cs (233,19)", scriptName);
 		if (com != null)
 		{
 			FxmPopupManager.inst.ShowToolMessage("success... Add script - " + scriptName);

@@ -82,12 +82,12 @@ public class NcParticleSystem : NcEffectBehaviour
 
 	public bool IsShuriken()
 	{
-		return particleSystem != null;
+		return GetComponent<ParticleSystem>() != null;
 	}
 
 	public bool IsLegacy()
 	{
-		return particleEmitter != null && particleEmitter.enabled;
+		return GetComponent<ParticleEmitter>() != null && GetComponent<ParticleEmitter>().enabled;
 	}
 
 #if UNITY_EDITOR
@@ -96,7 +96,7 @@ public class NcParticleSystem : NcEffectBehaviour
 		if (1 < gameObject.GetComponents(GetType()).Length)
 			return "SCRIPT_WARRING_DUPLICATE";
 
-		if (particleSystem == null && particleEmitter == null)
+		if (GetComponent<ParticleSystem>() == null && GetComponent<ParticleEmitter>() == null)
 			return "SCRIPT_EMPTY_PARTICLE";
 
 // 		if (m_ParticleDestruct != ParticleDestruct.NONE && m_AttachPrefab == null)
@@ -162,7 +162,7 @@ public class NcParticleSystem : NcEffectBehaviour
 // 		particleEmitter.emit = false;
 		if (IsShuriken())
 		{
-			m_ps = particleSystem;
+			m_ps = GetComponent<ParticleSystem>();
 		} else {
 			m_pe = GetComponent<ParticleEmitter>();
 			m_pa = GetComponent<ParticleAnimator>();
@@ -769,9 +769,9 @@ public class NcParticleSystem : NcEffectBehaviour
 	public void SaveShurikenSpeed()
 	{
 		// Set particleSystem.speed
-		if (particleSystem != null)
+		if (GetComponent<ParticleSystem>() != null)
 		{
-			SerializedObject sysSo = new SerializedObject(particleSystem);
+			SerializedObject sysSo = new SerializedObject(GetComponent<ParticleSystem>());
 			SetPropertyValue(sysSo, "speed", m_fShurikenSpeedRate, true);
 		}
 	}

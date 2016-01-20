@@ -87,9 +87,9 @@ public class NcTrailTexture : NcEffectBehaviour
 	{
 // 		if (1 < gameObject.GetComponents(GetType()).Length)
 // 			return "SCRIPT_WARRING_DUPLICATE";
-		if (renderer == null)
+		if (GetComponent<Renderer>() == null)
 			return "SCRIPT_EMPTY_MESHRENDERER";
-		if (renderer.sharedMaterial == null)
+		if (GetComponent<Renderer>().sharedMaterial == null)
 			return "SCRIPT_EMPTY_MATERIAL";
 
 		return "";	// no error
@@ -116,7 +116,7 @@ public class NcTrailTexture : NcEffectBehaviour
 
 	void Start()
 	{
-		if (renderer == null || renderer.sharedMaterial == null)
+		if (GetComponent<Renderer>() == null || GetComponent<Renderer>().sharedMaterial == null)
 		{
 			enabled = false;
 			return;
@@ -143,7 +143,7 @@ public class NcTrailTexture : NcEffectBehaviour
 		m_TrialObject.AddComponent(typeof(MeshFilter));
 		m_TrialObject.AddComponent(typeof(MeshRenderer));
 // 		m_TrialObject.AddComponent<Nc>();
-		m_TrialObject.renderer.sharedMaterial = renderer.sharedMaterial;
+		m_TrialObject.GetComponent<Renderer>().sharedMaterial = GetComponent<Renderer>().sharedMaterial;
 		m_TrailMesh = m_TrialObject.GetComponent<MeshFilter>().mesh;
 		CreateEditorGameObject(m_TrialObject);
 	}
@@ -164,7 +164,7 @@ public class NcTrailTexture : NcEffectBehaviour
 
 	void Update()
 	{
-		if (renderer == null || renderer.sharedMaterial == null)
+		if (GetComponent<Renderer>() == null || GetComponent<Renderer>().sharedMaterial == null)
 		{
 			enabled = false;
 			return;

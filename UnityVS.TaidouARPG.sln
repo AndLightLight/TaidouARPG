@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.TaiDouARPG.CSharp.Plugins", "UnityVS.TaiDouARPG.CSharp.Plugins.csproj", "{BB4EDDC7-811F-5630-7892-124934857F5A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.TaidouARPG.CSharp.Plugins", "UnityVS.TaidouARPG.CSharp.Plugins.csproj", "{9319D8D4-6E38-A3DE-5CE9-CBEC1894CBDE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.TaiDouARPG.CSharp", "UnityVS.TaiDouARPG.CSharp.csproj", "{85C8D9E8-240A-D5F2-5DB9-809899A57247}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.TaidouARPG.CSharp", "UnityVS.TaidouARPG.CSharp.csproj", "{0311F118-F1C6-E705-8E8E-E46588305382}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.TaiDouARPG.CSharp.Editor", "UnityVS.TaiDouARPG.CSharp.Editor.csproj", "{33466F69-E4D3-9DB8-6291-78D477357371}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityVS.TaidouARPG.CSharp.Editor", "UnityVS.TaidouARPG.CSharp.Editor.csproj", "{537B5F95-368D-711D-8021-CEFC9BA6B82D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,18 +13,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BB4EDDC7-811F-5630-7892-124934857F5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BB4EDDC7-811F-5630-7892-124934857F5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BB4EDDC7-811F-5630-7892-124934857F5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BB4EDDC7-811F-5630-7892-124934857F5A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{85C8D9E8-240A-D5F2-5DB9-809899A57247}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{85C8D9E8-240A-D5F2-5DB9-809899A57247}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{85C8D9E8-240A-D5F2-5DB9-809899A57247}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{85C8D9E8-240A-D5F2-5DB9-809899A57247}.Release|Any CPU.Build.0 = Release|Any CPU
-		{33466F69-E4D3-9DB8-6291-78D477357371}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{33466F69-E4D3-9DB8-6291-78D477357371}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{33466F69-E4D3-9DB8-6291-78D477357371}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{33466F69-E4D3-9DB8-6291-78D477357371}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9319D8D4-6E38-A3DE-5CE9-CBEC1894CBDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9319D8D4-6E38-A3DE-5CE9-CBEC1894CBDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9319D8D4-6E38-A3DE-5CE9-CBEC1894CBDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9319D8D4-6E38-A3DE-5CE9-CBEC1894CBDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0311F118-F1C6-E705-8E8E-E46588305382}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0311F118-F1C6-E705-8E8E-E46588305382}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0311F118-F1C6-E705-8E8E-E46588305382}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0311F118-F1C6-E705-8E8E-E46588305382}.Release|Any CPU.Build.0 = Release|Any CPU
+		{537B5F95-368D-711D-8021-CEFC9BA6B82D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{537B5F95-368D-711D-8021-CEFC9BA6B82D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{537B5F95-368D-711D-8021-CEFC9BA6B82D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{537B5F95-368D-711D-8021-CEFC9BA6B82D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

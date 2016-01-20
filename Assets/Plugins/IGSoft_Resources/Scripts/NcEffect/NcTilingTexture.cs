@@ -29,7 +29,7 @@ public class NcTilingTexture : NcEffectBehaviour
 			return "SCRIPT_WARRING_DUPLICATE";
 		if (1 < GetEditingUvComponentCount())
 			return "SCRIPT_DUPERR_EDITINGUV";
-		if (renderer == null || renderer.sharedMaterial == null)
+		if (GetComponent<Renderer>() == null || GetComponent<Renderer>().sharedMaterial == null)
 			return "SCRIPT_EMPTY_MATERIAL";
 
 		return "";	// no error
@@ -39,11 +39,11 @@ public class NcTilingTexture : NcEffectBehaviour
 	// Loop Function --------------------------------------------------------------------
 	void Start()
 	{
-		if (renderer != null && renderer.material != null)
+		if (GetComponent<Renderer>() != null && GetComponent<Renderer>().material != null)
 		{
-			renderer.material.mainTextureScale	= new Vector2(m_fTilingX, m_fTilingY);
-			renderer.material.mainTextureOffset = new Vector2(m_fOffsetX, m_fOffsetY);
-			AddRuntimeMaterial(renderer.material);
+			GetComponent<Renderer>().material.mainTextureScale	= new Vector2(m_fTilingX, m_fTilingY);
+			GetComponent<Renderer>().material.mainTextureOffset = new Vector2(m_fOffsetX, m_fOffsetY);
+			AddRuntimeMaterial(GetComponent<Renderer>().material);
 		}
 	}
 
@@ -55,7 +55,7 @@ public class NcTilingTexture : NcEffectBehaviour
 				m_fTilingX = m_OriginalTiling.x * (transform.lossyScale.x / m_OriginalScale.x);
 			if (m_OriginalScale.y != 0)
 				m_fTilingY = m_OriginalTiling.y * (transform.lossyScale.y / m_OriginalScale.y);
-			renderer.material.mainTextureScale	= new Vector2(m_fTilingX, m_fTilingY);
+			GetComponent<Renderer>().material.mainTextureScale	= new Vector2(m_fTilingX, m_fTilingY);
 		}
 	}
 

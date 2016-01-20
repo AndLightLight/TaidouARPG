@@ -764,8 +764,8 @@ public class FXMakerMain : MonoBehaviour
 			if (NgSerialized.IsMeshParticleEmitter(pe as ParticleEmitter) && NgSerialized.GetMesh(pe, false) == null)
 			{
 // 				Debug.Log(pe.name + " - MeshParticleEmitter : missing mesh");
-				if (pe.gameObject.renderer != null)
-					DestroyImmediate(pe.gameObject.renderer);
+				if (pe.gameObject.GetComponent<Renderer>() != null)
+					DestroyImmediate(pe.gameObject.GetComponent<Renderer>());
 				DestroyImmediate(pe);
 			}
 		}

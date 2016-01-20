@@ -75,7 +75,7 @@ public class NcEffectInitBackup
 			}
 		} else {
 			// this Only
-			m_MaterialColorRenderer	= targetTrans.renderer;
+			m_MaterialColorRenderer	= targetTrans.GetComponent<Renderer>();
 			if (m_MaterialColorRenderer != null)
 			{
 				m_MaterialColorColorName		= GetMaterialColorName(m_MaterialColorRenderer.sharedMaterial);

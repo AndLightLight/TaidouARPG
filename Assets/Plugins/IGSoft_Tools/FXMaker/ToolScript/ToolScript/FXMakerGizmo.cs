@@ -797,19 +797,19 @@ public class FXMakerGizmo : MonoBehaviour
 		{
 			NgObject.SetActive(m_GridXYGameObject, (bShow && m_bGridXY));
 			m_GridXYGameObject.transform.localScale	= texSize;
-			m_GridXYGameObject.renderer.sharedMaterial.mainTextureScale	= texUnit;
+			m_GridXYGameObject.GetComponent<Renderer>().sharedMaterial.mainTextureScale	= texUnit;
 		}
 		if (m_GridXZGameObject != null)
 		{
 			NgObject.SetActive(m_GridXZGameObject, (bShow && m_bGridXZ));
 			m_GridXZGameObject.transform.localScale	= texSize;
-			m_GridXZGameObject.renderer.sharedMaterial.mainTextureScale	= texUnit;
+			m_GridXZGameObject.GetComponent<Renderer>().sharedMaterial.mainTextureScale	= texUnit;
 		}
 		if (m_GridYZGameObject != null)
 		{
 			NgObject.SetActive(m_GridYZGameObject, (bShow && m_bGridYZ));
 			m_GridYZGameObject.transform.localScale	= texSize;
-			m_GridYZGameObject.renderer.sharedMaterial.mainTextureScale	= texUnit;
+			m_GridYZGameObject.GetComponent<Renderer>().sharedMaterial.mainTextureScale	= texUnit;
 		}
 	}
 

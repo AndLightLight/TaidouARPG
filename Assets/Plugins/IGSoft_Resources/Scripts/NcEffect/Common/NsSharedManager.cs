@@ -56,10 +56,10 @@ public class NsSharedManager : MonoBehaviour
 			NcParticleSystem ps = sharedObj.GetComponent<NcParticleSystem>();
 			if (ps)
 				ps.enabled = false;
-			if (sharedObj.particleEmitter)
+			if (sharedObj.GetComponent<ParticleEmitter>())
 			{
-				sharedObj.particleEmitter.emit			= false;
-				sharedObj.particleEmitter.useWorldSpace	= true;
+				sharedObj.GetComponent<ParticleEmitter>().emit			= false;
+				sharedObj.GetComponent<ParticleEmitter>().useWorldSpace	= true;
 				ParticleAnimator paAni = sharedObj.GetComponent<ParticleAnimator>();
 				if (paAni)
 					paAni.autodestruct = false;
@@ -85,8 +85,8 @@ public class NsSharedManager : MonoBehaviour
 		if (sharedObj == null)
 			return;
 		sharedObj.transform.position = worldPos;
-		if (sharedObj.particleEmitter != null)
-			 sharedObj.particleEmitter.Emit(nEmitCount);
+		if (sharedObj.GetComponent<ParticleEmitter>() != null)
+			 sharedObj.GetComponent<ParticleEmitter>().Emit(nEmitCount);
 		else {
 				ParticleSystem ps = sharedObj.GetComponent<ParticleSystem>();
 			if (ps != null)

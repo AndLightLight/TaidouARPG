@@ -170,7 +170,7 @@ public class FXMakerClipboard : MonoBehaviour
 			// not used
 			GameObject newObj = NgObject.CreateGameObject(m_CopyCloneObject as GameObject);
 			NgObject.SetActiveRecursively(newObj, false);
-			newObj.transform.parent = tarGameObject.transform; // ¿À·ùÀÖ´Ù... »ç¿ë¾ÈÇÏ¹Ç·Î ³ªÁß¿¡ Ã³¸®
+			newObj.transform.parent = tarGameObject.transform; // å·å¹…ä¹ä¿ƒ... è¤ä¾©æ•‘çªéª¨è‚º å”±åä¿Š è´¸åºœ
 			newObj.name = newObj.name.Replace("(Clone)", "");
 			newObj.name = newObj.name.Replace("(Original)", "");
 			return newObj;
@@ -244,11 +244,11 @@ public class FXMakerClipboard : MonoBehaviour
 		}
 
 		// New or Overwrite data
-		if (srcObject is Material && tarTrans.renderer != null)
+		if (srcObject is Material && tarTrans.GetComponent<Renderer>() != null)
 			retObject = FXMakerClipboard.ObjectCopy((srcObject as Material), tarTrans, tarIndex);
 
 		// New or Overwrite data
-		if (srcObject is AnimationClip && tarTrans.animation != null)
+		if (srcObject is AnimationClip && tarTrans.GetComponent<Animation>() != null)
 			retObject = FXMakerClipboard.ObjectCopy((srcObject as AnimationClip), tarTrans, tarIndex);
 
 		return retObject;
@@ -277,9 +277,9 @@ public class FXMakerClipboard : MonoBehaviour
 		Component[] tarComs	= null;
 		Component	retCom	= null;
 
-		// bCreateNewTarget ÂüÀÌ¿©µµ, bSearchTarComponent ÂüÀÌ¸é »õ·Î »ı¼º¾ÈÇÔ
+		// bCreateNewTarget æ›¼æå’¯æ¡£, bSearchTarComponent æ›¼ææ è´§è‚º ç§¯å·±æ•‘çªƒ
 
-		if ((bCreateNewTarget == false) && src.GetType() == dstSelObj.GetType())	// ½Å±Ô»ı¼º Á¶°ÇÀÌ ¾Æ´Ï¸ç, °°Àº°Ô¿¡ µå¶øÁß
+		if ((bCreateNewTarget == false) && src.GetType() == dstSelObj.GetType())	// è„šç—¹ç§¯å·± ç‚¼æ‰’æ é…’èªå“¥, éç¯®éœ¸ä¿Š é›è€Œå
 		{
 // 			if (NgAssembly.IsValidCopy(dst, src))
 			{
@@ -290,14 +290,14 @@ public class FXMakerClipboard : MonoBehaviour
 			if (bSearchTarComponent)
 				tarComs = dstSelTrans.GetComponents(src.GetType());
 		}
-		if (tarComs == null || tarComs.Length <= 0)					// ¾ø´Ù ¸¸µéÀÚ
+		if (tarComs == null || tarComs.Length <= 0)					// ç»ä¿ƒ çˆ¶ç”¸ç£Š
 		{
 			tarComs		= new Component[1];
 			tarComs[0]	= NgSerialized.AddComponent(dstSelTrans.gameObject, (src as Component));
 		}
 		if (tarComs != null)
 		{
-			foreach (Component tarcom in tarComs)					// ³»¿ë º¹»ç
+			foreach (Component tarcom in tarComs)					// éƒ´ä¾© æ±—è¤
 			{
 				if (src != tarcom)
 				{
@@ -314,15 +314,15 @@ public class FXMakerClipboard : MonoBehaviour
 
 	public static Material ObjectCopy(Material src, Transform dstSelTrans, int nDstSelIndex)
 	{
-		if (dstSelTrans.renderer != null)
-			return NgMaterial.SetSharedMaterial(dstSelTrans.renderer, nDstSelIndex, src);
+		if (dstSelTrans.GetComponent<Renderer>() != null)
+			return NgMaterial.SetSharedMaterial(dstSelTrans.GetComponent<Renderer>(), nDstSelIndex, src);
 		return null;
 	}
 
 	public static AnimationClip ObjectCopy(AnimationClip src, Transform dstSelTrans, int nDstSelIndex)
 	{
-		if (dstSelTrans.animation != null)
-			return NgAnimation.SetAnimation(dstSelTrans.animation, nDstSelIndex, src);
+		if (dstSelTrans.GetComponent<Animation>() != null)
+			return NgAnimation.SetAnimation(dstSelTrans.GetComponent<Animation>(), nDstSelIndex, src);
 		return null;
 	}
 }
