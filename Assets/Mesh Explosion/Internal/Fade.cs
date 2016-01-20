@@ -33,7 +33,7 @@ public class Fade : MonoBehaviour {
 	
 	IEnumerator Start() {
 		var m = materials;
-		if (m == null || m.Length == 0) materials = m = renderer.materials;
+		if (m == null || m.Length == 0) materials = m = GetComponent<Renderer>().materials;
 		
 		if (waitTime > 0) yield return new WaitForSeconds(waitTime);
 		

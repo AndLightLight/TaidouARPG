@@ -1,6 +1,6 @@
 ﻿//----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2014 Tasharen Entertainment
+// Copyright © 2011-2015 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -9,4 +9,6 @@ using UnityEngine;
 public class UIDragDropContainer : MonoBehaviour
 {
 	public Transform reparentTarget;
+
+	protected virtual void Start () { if (reparentTarget == null) reparentTarget = transform; }
 }

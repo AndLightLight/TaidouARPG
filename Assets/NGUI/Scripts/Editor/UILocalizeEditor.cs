@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2014 Tasharen Entertainment
+// Copyright © 2011-2015 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -8,11 +8,7 @@ using UnityEditor;
 using System.Collections.Generic;
 
 [CanEditMultipleObjects]
-#if UNITY_3_5
-[CustomEditor(typeof(UILocalize))]
-#else
 [CustomEditor(typeof(UILocalize), true)]
-#endif
 public class UILocalizeEditor : Editor
 {
 	List<string> mKeys;
@@ -50,11 +46,7 @@ public class UILocalizeEditor : Editor
 		GUI.color = isPresent ? Color.green : Color.red;
 		GUILayout.BeginVertical(GUILayout.Width(22f));
 		GUILayout.Space(2f);
-#if UNITY_3_5
-		GUILayout.Label(isPresent? "ok" : "!!", GUILayout.Height(20f));
-#else
 		GUILayout.Label(isPresent? "\u2714" : "\u2718", "TL SelectionButtonNew", GUILayout.Height(20f));
-#endif
 		GUILayout.EndVertical();
 		GUI.color = Color.white;
 		GUILayout.EndHorizontal();
@@ -65,29 +57,33 @@ public class UILocalizeEditor : Editor
 			{
 				NGUIEditorTools.BeginContents();
 
-				string[] keys;
+				string[] keys = Localization.knownLanguages;
 				string[] values;
 
-				if (Localization.dictionary.TryGetValue("KEY", out keys) && Localization.dictionary.TryGetValue(myKey, out values))
+				if (Localization.dictionary.TryGetValue(myKey, out values))
 				{
-					for (int i = 0; i < keys.Length; ++i)
+					if (keys.Length != values.Length)
 					{
-						GUILayout.BeginHorizontal();
-						GUILayout.Label(keys[i], GUILayout.Width(70f));
-
-						if (GUILayout.Button(values[i], "AS TextArea", GUILayout.MinWidth(80f), GUILayout.MaxWidth(Screen.width - 110f)))
+						EditorGUILayout.HelpBox("Number of keys doesn't match the number of values! Did you modify the dictionaries by hand at some point?", MessageType.Error);
+					}
+					else
+					{
+						for (int i = 0; i < keys.Length; ++i)
 						{
-							(target as UILocalize).value = values[i];
-							GUIUtility.hotControl = 0;
-							GUIUtility.keyboardControl = 0;
+							GUILayout.BeginHorizontal();
+							GUILayout.Label(keys[i], GUILayout.Width(66f));
+
+							if (GUILayout.Button(values[i], "AS TextArea", GUILayout.MinWidth(80f), GUILayout.MaxWidth(Screen.width - 110f)))
+							{
+								(target as UILocalize).value = values[i];
+								GUIUtility.hotControl = 0;
+								GUIUtility.keyboardControl = 0;
+							}
+							GUILayout.EndHorizontal();
 						}
-						GUILayout.EndHorizontal();
 					}
 				}
-				else
-				{
-					GUILayout.Label("No preview available");
-				}
+				else GUILayout.Label("No preview available");
 
 				NGUIEditorTools.EndContents();
 			}
@@ -105,11 +101,7 @@ public class UILocalizeEditor : Editor
 			{
 				if (mKeys[i].StartsWith(myKey, System.StringComparison.OrdinalIgnoreCase) || mKeys[i].Contains(myKey))
 				{
-#if UNITY_3_5
-					if (GUILayout.Button(mKeys[i] + " \u25B2"))
-#else
 					if (GUILayout.Button(mKeys[i] + " \u25B2", "CN CountBadge"))
-#endif
 					{
 						sp.stringValue = mKeys[i];
 						GUIUtility.hotControl = 0;

@@ -1,17 +1,12 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2014 Tasharen Entertainment
+// Copyright © 2011-2015 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
 using UnityEditor;
 
-[CanEditMultipleObjects]
-#if UNITY_3_5
-[CustomEditor(typeof(UIWrapContent))]
-#else
 [CustomEditor(typeof(UIWrapContent), true)]
-#endif
 public class UIWrapContentEditor : Editor
 {
 	public override void OnInspectorGUI ()

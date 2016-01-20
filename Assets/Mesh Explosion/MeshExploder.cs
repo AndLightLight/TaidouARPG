@@ -326,7 +326,7 @@ public class MeshExploder : MonoBehaviour {
 		
 		if (fadeTime != 0 && !shadersAlreadyHandleTransparency) {
 			// Preload any replacement shaders that will be needed:
-			foreach (var i in renderer.sharedMaterials) {
+			foreach (var i in GetComponent<Renderer>().sharedMaterials) {
 				var shader = i.shader;
 				var replacement = Fade.GetReplacementFor(shader);
 				if (replacement == null || !replacement.name.StartsWith("Transparent/")) {
@@ -470,7 +470,7 @@ public class MeshExploder : MonoBehaviour {
 		explosion.AddComponent<MeshFilter>();
 		var explosionRenderer = explosion.AddComponent<MeshRenderer>();
 		{
-			var thisRenderer = renderer;
+			var thisRenderer = GetComponent<Renderer>();
 			explosionRenderer.castShadows = thisRenderer.castShadows;
 			explosionRenderer.receiveShadows = thisRenderer.receiveShadows;
 			explosionRenderer.sharedMaterials = thisRenderer.sharedMaterials;

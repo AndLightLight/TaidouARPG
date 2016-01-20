@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2014 Tasharen Entertainment
+// Copyright © 2011-2015 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -11,11 +11,7 @@ using UnityEditor;
 /// </summary>
 
 [CanEditMultipleObjects]
-#if UNITY_3_5
-[CustomEditor(typeof(UIWidgetContainer))]
-#else
 [CustomEditor(typeof(UIWidgetContainer), true)]
-#endif
 public class UIWidgetContainerEditor : Editor
 {
 	static int mHash = "WidgetContainer".GetHashCode();

@@ -46,14 +46,14 @@
     <Reference Include="System.Core" />
     <Reference Include="Boo.Lang" />
     <Reference Include="UnityScript.Lang" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="UnityEngine">
       <HintPath>Library\UnityAssemblies\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
@@ -116,6 +116,9 @@
     </Reference>
     <Reference Include="SyntaxTree.VisualStudio.Unity.Messaging">
       <HintPath>Assets\UnityVS\Editor\SyntaxTree.VisualStudio.Unity.Messaging.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityVS.VersionSpecific">
+      <HintPath>Assets\UnityVS\Editor\UnityVS.VersionSpecific.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-UnityScript">
       <HintPath>Library\ScriptAssemblies\Assembly-UnityScript.dll</HintPath>
@@ -218,11 +221,6 @@
     <Compile Include="Assets\NGUI\Scripts\Editor\UIWrapContentEditor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\Effects\Shaders\GlowAdditiveTwoColor.shader" />
-    <None Include="Assets\Effects\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\BlendForBloom.shader" />
-    <None Include="Assets\Effects\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\BlurAndFlares.shader" />
-    <None Include="Assets\Effects\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\BrightPassFilter2.shader" />
-    <None Include="Assets\Effects\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\LensFlareCreate.shader" />
     <None Include="Assets\Enemy\Masked Orc\Read Me.txt" />
     <None Include="Assets\Model\Npc_boy\villarger_B_Boy\ReadMe [V 1.4]  02 06.txt" />
     <None Include="Assets\NGUI\Examples\Atlases\Fantasy\Fantasy Font - Normal.txt" />
@@ -241,7 +239,6 @@
     <None Include="Assets\NGUI\Examples\Shaders\Unlit - Depth Cutout.shader" />
     <None Include="Assets\NGUI\Examples\Shaders\Unlit - Depth.shader" />
     <None Include="Assets\NGUI\Examples\Shaders\Unlit - Masked Colored.shader" />
-    <None Include="Assets\NGUI\ReadMe - 3.6.8.txt" />
     <None Include="Assets\NGUI\ReadMe - 3.8.2.txt" />
     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (TextureClip).shader" />
     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored 1.shader" />
@@ -267,11 +264,6 @@
     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Packed 2.shader" />
     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Packed 3.shader" />
     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Packed.shader" />
-    <None Include="Assets\Plugins\IGSoft_Resources\ToolResources\EffectShader\FXMaker_Mask Additive Tint.shader" />
-    <None Include="Assets\Plugins\IGSoft_Resources\ToolResources\EffectShader\FXMaker_Mask Alpha Blended Tint.shader" />
-    <None Include="Assets\Script\mainmenu\knapsack\InventoryListinfo.txt" />
-    <None Include="Assets\Script\txt\Skill         技能信息清单.txt" />
-    <None Include="Assets\Script\txt\Task 任务信息清单.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2013\UnityVS.CSharp.targets" />
 </Project>

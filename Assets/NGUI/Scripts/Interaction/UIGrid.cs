@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2014 Tasharen Entertainment
+// Copyright © 2011-2015 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -20,6 +20,7 @@ public class UIGrid : UIWidgetContainer
 	{
 		Horizontal,
 		Vertical,
+		CellSnap,
 	}
 
 	public enum Sorting
@@ -32,7 +33,7 @@ public class UIGrid : UIWidgetContainer
 	}
 
 	/// <summary>
-	/// Type of arrangement -- vertical or horizontal.
+	/// Type of arrangement -- vertical, horizontal or cell snap.
 	/// </summary>
 
 	public Arrangement arrangement = Arrangement.Horizontal;
@@ -79,7 +80,7 @@ public class UIGrid : UIWidgetContainer
 	/// Whether to ignore the disabled children or to treat them as being present.
 	/// </summary>
 
-	public bool hideInactive = true;
+	public bool hideInactive = false;
 
 	/// <summary>
 	/// Whether the parent container will be notified of the grid's changes.
@@ -129,7 +130,7 @@ public class UIGrid : UIWidgetContainer
 		}
 
 		// Sort the list using the desired sorting logic
-		if (sorting != Sorting.None)
+		if (sorting != Sorting.None && arrangement != Arrangement.CellSnap)
 		{
 			if (sorting == Sorting.Alphabetic) list.Sort(SortByName);
 			else if (sorting == Sorting.Horizontal) list.Sort(SortHorizontal);
@@ -262,9 +263,15 @@ public class UIGrid : UIWidgetContainer
 
 	protected virtual void Update ()
 	{
-		if (mReposition) Reposition();
+		Reposition();
 		enabled = false;
 	}
+
+	/// <summary>
+	/// Reposition the content on inspector validation.
+	/// </summary>
+
+	void OnValidate () { if (!Application.isPlaying && NGUITools.GetActive(this)) Reposition(); }
 
 	// Various generic sorting functions
 	static public int SortByName (Transform a, Transform b) { return string.Compare(a.name, b.name); }
@@ -284,11 +291,7 @@ public class UIGrid : UIWidgetContainer
 	[ContextMenu("Execute")]
 	public virtual void Reposition ()
 	{
-		if (Application.isPlaying && !mInitDone && NGUITools.GetActive(this))
-		{
-			mReposition = true;
-			return;
-		}
+		if (Application.isPlaying && !mInitDone && NGUITools.GetActive(gameObject)) Init();
 
 		// Legacy functionality
 		if (sorted)
@@ -298,8 +301,6 @@ public class UIGrid : UIWidgetContainer
 				sorting = Sorting.Alphabetic;
 			NGUITools.SetDirty(this);
 		}
-
-		if (!mInitDone) Init();
 
 		// Get the list of children in their current order
 		List<Transform> list = GetChildList();
@@ -322,14 +323,18 @@ public class UIGrid : UIWidgetContainer
 	public void ConstrainWithinPanel ()
 	{
 		if (mPanel != null)
+		{
 			mPanel.ConstrainTargetToBounds(transform, true);
+			UIScrollView sv = mPanel.GetComponent<UIScrollView>();
+			if (sv != null) sv.UpdateScrollbars(true);
+		}
 	}
 
 	/// <summary>
 	/// Reset the position of all child objects based on the order of items in the list.
 	/// </summary>
 
-	protected void ResetPosition (List<Transform> list)
+	protected virtual void ResetPosition (List<Transform> list)
 	{
 		mReposition = false;
 
@@ -351,8 +356,15 @@ public class UIGrid : UIWidgetContainer
 			// See above
 			//t.parent = myTrans;
 
-			float depth = t.localPosition.z;
-			Vector3 pos = (arrangement == Arrangement.Horizontal) ?
+			Vector3 pos = t.localPosition;
+			float depth = pos.z;
+
+			if (arrangement == Arrangement.CellSnap)
+			{
+				if (cellWidth > 0) pos.x = Mathf.Round(pos.x / cellWidth) * cellWidth;
+				if (cellHeight > 0) pos.y = Mathf.Round(pos.y / cellHeight) * cellHeight;
+			}
+			else pos = (arrangement == Arrangement.Horizontal) ?
 				new Vector3(cellWidth * x, -cellHeight * y, depth) :
 				new Vector3(cellWidth * y, -cellHeight * x, depth);
 

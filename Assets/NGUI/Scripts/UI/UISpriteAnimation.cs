@@ -1,6 +1,6 @@
 //----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2014 Tasharen Entertainment
+// Copyright © 2011-2015 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -68,19 +68,19 @@ public class UISpriteAnimation : MonoBehaviour
 
 	protected virtual void Update ()
 	{
-		if (mActive && mSpriteNames.Count > 1 && Application.isPlaying && mFPS > 0f)
+		if (mActive && mSpriteNames.Count > 1 && Application.isPlaying && mFPS > 0)
 		{
 			mDelta += RealTime.deltaTime;
 			float rate = 1f / mFPS;
 
 			if (rate < mDelta)
 			{
-				
 				mDelta = (rate > 0f) ? mDelta - rate : 0f;
+
 				if (++mIndex >= mSpriteNames.Count)
 				{
 					mIndex = 0;
-					mActive = loop;
+					mActive = mLoop;
 				}
 
 				if (mActive)
@@ -119,10 +119,22 @@ public class UISpriteAnimation : MonoBehaviour
 	}
 	
 	/// <summary>
+	/// Reset the animation to the beginning.
+	/// </summary>
+
+	public void Play () { mActive = true; }
+
+	/// <summary>
+	/// Pause the animation.
+	/// </summary>
+
+	public void Pause () { mActive = false; }
+
+	/// <summary>
 	/// Reset the animation to frame 0 and activate it.
 	/// </summary>
-	
-	public void Reset()
+
+	public void ResetToBeginning ()
 	{
 		mActive = true;
 		mIndex = 0;

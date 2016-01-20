@@ -1,6 +1,6 @@
 ﻿//----------------------------------------------
 //            NGUI: Next-Gen UI kit
-// Copyright © 2011-2014 Tasharen Entertainment
+// Copyright © 2011-2015 Tasharen Entertainment
 //----------------------------------------------
 
 using UnityEngine;
@@ -34,7 +34,7 @@ public class BMGlyph
 		{
 			for (int i = 0, imax = kerning.Count; i < imax; i += 2)
 				if (kerning[i] == previousChar)
-					return kerning[i+1];
+					return kerning[i + 1];
 		}
 		return 0;
 	}
@@ -51,7 +51,7 @@ public class BMGlyph
 		{
 			if (kerning[i] == previousChar)
 			{
-				kerning[i+1] = amount;
+				kerning[i + 1] = amount;
 				return;
 			}
 		}

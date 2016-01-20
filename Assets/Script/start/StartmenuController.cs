@@ -1,19 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
-using TaidouCommon.Model;
 
 public class StartmenuController : MonoBehaviour {
-
-    public static StartmenuController _instance;
 
     public TweenScale startpanelTween;
     public TweenScale loginpanelTween;
     public TweenScale registerpanelTween;
     public TweenScale serverpanelTween;
-    public TweenPosition startpanelTweenPos;
-    public TweenPosition characterselectTween;
-    public TweenPosition charactershowTween;
 
     public UIInput usernameInputLogin;
     public UIInput passwordInputLogin;
@@ -24,8 +17,6 @@ public class StartmenuController : MonoBehaviour {
     public static string username;
     public static string password;
     public static ServerProperty sp;
-    public static List<Role> roleList = null;
-
 
     public UIInput usernameInputRegister;
     public UIInput passwordInputRegister;
@@ -40,110 +31,8 @@ public class StartmenuController : MonoBehaviour {
 
     public GameObject serverSelectedGo;
 
-    public GameObject[] characterArray;
-    public GameObject[] characterSelectedArray;
-
-    private GameObject characterSelected;//当前选择的角色
-
-    public UIInput characternameInput;
-    public Transform characterSelectedParent;
-
-    public UILabel nameLabelCharacterselect;
-    public UILabel levelLabelCharacterselect;
-
-    private LoginController loginController;
-    private RegisterController registerController;
-    private RoleController roleController;
-
-    void Awake() {
-        _instance = this;
-        loginController = this.GetComponent<LoginController>();
-        registerController = this.GetComponent<RegisterController>();
-        roleController = this.GetComponent<RoleController>();
-
-        roleController.OnAddRole += OnAddRole;
-        roleController.OnGetRole += OnGetRole;
-        roleController.OnSelectRole += OnSelectRole;
-    }
-
     void Start() {
-        //InitServerlist();
-    }
-
-    void OnDestroy()
-    {
-        if (roleController != null)
-        {
-            roleController.OnAddRole -= OnAddRole;
-            roleController.OnGetRole -= OnGetRole;
-        }
-    }
-
-    public void OnGetRole(List<Role> roleList)
-    {
-        StartmenuController.roleList = roleList;
-        //这个是得到了角色信息之后的处理
-        if (roleList != null && roleList.Count > 0)
-        {
-            //进入角色显示的界面
-            Role role = roleList[0];
-            ShowRole(role);
-        }
-        else
-        {
-            //进入角色创建的界面
-            ShowRoleAddPanel();
-        }
-    }
-
-    public void OnAddRole(Role role)
-    {
-        if (roleList == null)
-        {
-            roleList = new List<Role>();
-        }
-        roleList.Add(role);
-        ShowRole(role);
-    }
-
-    public void OnSelectRole()
-    {
-        characterselectTween.gameObject.SetActive(false);
-        AsyncOperation operation = Application.LoadLevelAsync(1);
-        LoadSceneProgressBar._instance.Show(operation);
-    }
-
-    public void ShowRole( Role role )
-    {
-        PhotonEngine.Instance.role = role;
-        ShowCharacterselect();
-
-        nameLabelCharacterselect.text = role.Name;
-        levelLabelCharacterselect.text = "Lv." + role.Level;
-
-        int index = -1;
-        for (int i = 0; i < characterArray.Length; i++) {
-            if ((characterArray[i].name.IndexOf("boy") >= 0 && role.IsMan) || (characterArray[i].name.IndexOf("girl") >= 0 && role.IsMan==false)) {
-                index = i;
-                break;
-            }
-        }
-        if (index == -1) {
-            return;
-        }
-        GameObject.Destroy(characterSelectedParent.GetComponentInChildren<Animation>().gameObject);// 销毁现有的角色
-        //创建新选择的角色
-        GameObject go = GameObject.Instantiate(characterSelectedArray[index], Vector3.zero, Quaternion.identity) as GameObject;
-        go.transform.parent = characterSelectedParent;
-        go.transform.localPosition = Vector3.zero;
-        go.transform.localRotation = Quaternion.identity;
-        go.transform.localScale = new Vector3(1, 1, 1);
-    }
-
-
-    public void OnGamePlay()
-    {
-        roleController.SelectRole(PhotonEngine.Instance.role);
+        InitServerlist();
     }
 
     public void OnUsernameClick() {
@@ -164,28 +53,12 @@ public class StartmenuController : MonoBehaviour {
         //InitServerlist();//初始化服务器列表
     }
     public void OnEnterGameClick() {
-        
-        loginController.Login(username,password);
+        //1，连接服务器，验证用户名和服务器
+        //TODO
 
         //2,进入角色选择界面
-        //startpanelTweenPos.PlayForward();
-        //HidePanel(startpanelTweenPos.gameObject);
-        //characterselectTween.gameObject.SetActive(true);
-        //characterselectTween.PlayForward();
+        //TODO
     }
-
-    public void ShowCharacterselect()
-    {
-        characterselectTween.gameObject.SetActive(true);
-        characterselectTween.PlayForward();
-    }
-
-    public void HideStartPanel()
-    {
-        startpanelTweenPos.PlayForward();
-        StartCoroutine(HidePanel(startpanelTweenPos.gameObject));
-    }
-
     //隐藏面板
     IEnumerator HidePanel(GameObject go) {
         yield return new WaitForSeconds(0.4f);
@@ -233,43 +106,22 @@ public class StartmenuController : MonoBehaviour {
         OnCancelClick();
     }
     public void OnRegisterAndLoginClick() {
+        //1，本地校验，连接服务器进行验证
+        //TODO
+        //2，连接失败
+        //TODO
+        //3，连接成功
+        //保存用户名和密码
         username = usernameInputRegister.value;
         password = passwordInputRegister.value;
-        string rePasswrod = repasswordInputRegister.value;
-
-
-        if (username == null || username.Length <= 3)
-        {
-            MessageManager._instance.ShowMessage("用户名不能少于三个字符");
-            return;
-        }
-        if (password == null || password.Length <= 3)
-        {
-            MessageManager._instance.ShowMessage("密码不能少于三个字符");
-            return;
-        }
-
-        if (password != rePasswrod)
-        {
-            MessageManager._instance.ShowMessage("密码输入不一致",2);
-            return;
-        }
-
-        registerController.Register(username,password,this);
-
-        //usernameLabelStart.text = username;
-    }
-
-    public void HideRegisterPanel()
-    {
+        //返回到开始界面
+        //隐藏注册面板
         registerpanelTween.PlayReverse();
         StartCoroutine(HidePanel(registerpanelTween.gameObject));
-    }
-
-    public void ShowStartPanel()
-    {
         startpanelTween.gameObject.SetActive(true);
         startpanelTween.PlayReverse();
+
+        usernameLabelStart.text = username;
     }
 
     public void InitServerlist() {
@@ -320,86 +172,6 @@ public class StartmenuController : MonoBehaviour {
         startpanelTween.PlayReverse();
 
         servernameLabelStart.text = sp.name;
-    }
-
-    public void OnCharacterClick( GameObject go ) {
-        if (go == characterSelected) {
-            return;
-        }
-        iTween.ScaleTo(go, new Vector3(1.5f, 1.5f, 1.5f), 0.5f);
-        if (characterSelected != null) {
-            iTween.ScaleTo(characterSelected, new Vector3(1f, 1f, 1f), 0.5f);
-        }
-        characterSelected = go;
-
-        //判断当前选择的角色是否已经创建，通过名字来判断
-        foreach (var role in roleList)
-        {
-            if ((role.IsMan && go.name.IndexOf("boy") >= 0) || (role.IsMan == false && go.name.IndexOf("girl") >= 0))
-            {
-                characternameInput.value = role.Name;
-            }
-        }
-    }
-    //当点击了更换角色按钮
-    public void OnButtonChangecharacterClick() {
-        //隐藏自身的面板
-        characterselectTween.PlayReverse();
-        HidePanel(characterselectTween.gameObject);
-        //显示展示角色的面板
-        charactershowTween.gameObject.SetActive(true);
-        charactershowTween.PlayForward();
-    }
-
-    public void ShowRoleAddPanel() {
-        charactershowTween.gameObject.SetActive(true);
-        charactershowTween.PlayForward();
-    }
-
-    public void OnCharactershowButtonSureClick() {
-
-        //判断角色的名字是否符合规则
-        if (characternameInput.value.Length <3)
-        {
-            MessageManager._instance.ShowMessage("角色的名字不能少于3个字符");
-            return;
-        }
-
-        //判断当前的角色是否已经创建
-        Role role = null;
-        foreach (var roleTemp in roleList) {
-            if ((roleTemp.IsMan && characterSelected.name.IndexOf("boy") >= 0) || (roleTemp.IsMan == false && characterSelected.name.IndexOf("girl") >= 0)) {
-                characternameInput.value = roleTemp.Name;
-                role = roleTemp;
-            }
-        }
-
-        if (role == null)
-        {
-            Role roleAdd = new Role();
-            roleAdd.IsMan = characterSelected.name.IndexOf("boy") >= 0 ? true : false;
-            roleAdd.Name = characternameInput.value;
-            roleAdd.Level = 1;
-            roleAdd.Exp = 0;
-            roleAdd.Coin = 20000;
-            roleAdd.Diamond = 1000;
-            roleAdd.Energy = 100;
-            roleAdd.Toughen = 50;
-            roleController.AddRole(roleAdd);
-        }
-        else
-        {
-            ShowRole(role);
-        }
-
-        OnCharactershowButtonBackClick();
-    }
-    public void OnCharactershowButtonBackClick() {
-        charactershowTween.PlayReverse();
-        HidePanel(charactershowTween.gameObject);
-
-        characterSelected.gameObject.SetActive(true);
-        characterselectTween.PlayForward();
     }
 
 }

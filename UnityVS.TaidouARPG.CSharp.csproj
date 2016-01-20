@@ -46,14 +46,11 @@
     <Reference Include="System.Core" />
     <Reference Include="Boo.Lang" />
     <Reference Include="UnityScript.Lang" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="UnityEngine">
       <HintPath>Library\UnityAssemblies\UnityEngine.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEditor">
-      <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
@@ -63,11 +60,8 @@
     <Reference Include="UnityEngine.Analytics">
       <HintPath>Library\UnityAssemblies\UnityEngine.Analytics.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Networking">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
+    <Reference Include="UnityEditor">
+      <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">
       <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
@@ -89,53 +83,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Effects\Script\Button.cs" />
-    <Compile Include="Assets\Effects\Scripts\Demo\MyGuiV2.cs" />
-    <Compile Include="Assets\Effects\Scripts\Prefabs\Balls\AddMaterialOnHit.cs" />
-    <Compile Include="Assets\Effects\Scripts\Prefabs\Balls\AnimatorBehaviour.cs" />
-    <Compile Include="Assets\Effects\Scripts\Prefabs\Balls\LazyLoad.cs" />
-    <Compile Include="Assets\Effects\Scripts\Prefabs\Balls\ProjectileCollisionBehaviour.cs" />
-    <Compile Include="Assets\Effects\Scripts\Prefabs\Balls\SetRandomStartPoint.cs" />
-    <Compile Include="Assets\Effects\Scripts\Prefabs\Buffs\ShieldCollisionBehaviour.cs" />
-    <Compile Include="Assets\Effects\Scripts\Prefabs\Objects\MoveOnGround.cs" />
-    <Compile Include="Assets\Effects\Scripts\Prefabs\Shots\LineRendererBehaviour.cs" />
-    <Compile Include="Assets\Effects\Scripts\Prefabs\Waves\ClothGridCollisionBehaviour.cs" />
-    <Compile Include="Assets\Effects\Scripts\Prefabs\Waves\InstanceMaterial.cs" />
-    <Compile Include="Assets\Effects\Scripts\Share\Billboard.cs" />
-    <Compile Include="Assets\Effects\Scripts\Share\CollisionActiveBehaviour.cs" />
-    <Compile Include="Assets\Effects\Scripts\Share\DeadTime.cs" />
-    <Compile Include="Assets\Effects\Scripts\Share\EffectSettings.cs" />
-    <Compile Include="Assets\Effects\Scripts\Share\FadeInOutLight.cs" />
-    <Compile Include="Assets\Effects\Scripts\Share\FadeInOutParticles.cs" />
-    <Compile Include="Assets\Effects\Scripts\Share\FadeInOutScale.cs" />
-    <Compile Include="Assets\Effects\Scripts\Share\FadeInOutShaderColor.cs" />
-    <Compile Include="Assets\Effects\Scripts\Share\FadeInOutShaderFloat.cs" />
-    <Compile Include="Assets\Effects\Scripts\Share\FadeInOutStatus.cs" />
-    <Compile Include="Assets\Effects\Scripts\Share\InvokeInterval.cs" />
-    <Compile Include="Assets\Effects\Scripts\Share\OnStartSendCollision.cs" />
-    <Compile Include="Assets\Effects\Scripts\Share\RandomRotateOnStart.cs" />
-    <Compile Include="Assets\Effects\Scripts\Share\SetPositionOnHit.cs" />
-    <Compile Include="Assets\Effects\Scripts\Share\UVTextureAnimator.cs" />
-    <Compile Include="Assets\Effects\Standard Assets\Image Effects (Pro Only)\ImageEffectBase.cs" />
-    <Compile Include="Assets\Effects\Standard Assets\Image Effects (Pro Only)\ImageEffects.cs" />
-    <Compile Include="Assets\GodScript\god\core\IObject.cs" />
-    <Compile Include="Assets\GodScript\god\core\Singleton.cs" />
-    <Compile Include="Assets\GodScript\logic\bag\BagDefines.cs" />
-    <Compile Include="Assets\GodScript\logic\bag\BagManager.cs" />
-    <Compile Include="Assets\GodScript\logic\item\ItemDefines.cs" />
-    <Compile Include="Assets\GodScript\logic\obj\ObjectDefines.cs" />
-    <Compile Include="Assets\GodScript\logic\scene\SceneDefines.cs" />
-    <Compile Include="Assets\GodScript\logic\skill\Skill.cs" />
-    <Compile Include="Assets\GodScript\logic\skill\SkillManager.cs" />
-    <Compile Include="Assets\GodScript\logic\skill\SkillSet.cs" />
-    <Compile Include="Assets\GodScript\logic\skill\skillBuffDefines.cs" />
-    <Compile Include="Assets\GodScript\logic\ui\IPanel.cs" />
-    <Compile Include="Assets\GodScript\logic\ui\LoginPanel.cs" />
-    <Compile Include="Assets\GodScript\logic\ui\LoginPanelMng.cs" />
-    <Compile Include="Assets\GodScript\logic\ui\LoginScene.cs" />
-    <Compile Include="Assets\GodScript\logic\ui\PanelManager.cs" />
-    <Compile Include="Assets\GodScript\start\ServerProperty.cs" />
-    <Compile Include="Assets\GodScript\start\StartmenuController.cs" />
     <Compile Include="Assets\Mesh Explosion\Internal\DestroyAfterTime.cs" />
     <Compile Include="Assets\Mesh Explosion\Internal\DestroyOnFadeCompletion.cs" />
     <Compile Include="Assets\Mesh Explosion\Internal\Fade.cs" />
@@ -168,15 +115,12 @@
     <Compile Include="Assets\NGUI\Examples\Scripts\Other\PanWithMouse.cs" />
     <Compile Include="Assets\NGUI\Examples\Scripts\Other\PlayIdleAnimations.cs" />
     <Compile Include="Assets\NGUI\Examples\Scripts\Other\SetColorOnSelection.cs" />
-    <Compile Include="Assets\NGUI\Examples\Scripts\Other\ShaderQuality.cs" />
     <Compile Include="Assets\NGUI\Examples\Scripts\Other\Spin.cs" />
     <Compile Include="Assets\NGUI\Examples\Scripts\Other\SpinWithMouse.cs" />
     <Compile Include="Assets\NGUI\Examples\Scripts\Other\Tutorial5.cs" />
     <Compile Include="Assets\NGUI\Examples\Scripts\Other\UISliderColors.cs" />
     <Compile Include="Assets\NGUI\Examples\Scripts\Other\WindowAutoYaw.cs" />
     <Compile Include="Assets\NGUI\Examples\Scripts\Other\WindowDragTilt.cs" />
-    <Compile Include="Assets\NGUI\HUD Text\Scripts\HUDText.cs" />
-    <Compile Include="Assets\NGUI\HUD Text\Scripts\UIFollowTarget.cs" />
     <Compile Include="Assets\NGUI\Scripts\Interaction\LanguageSelection.cs" />
     <Compile Include="Assets\NGUI\Scripts\Interaction\TypewriterEffect.cs" />
     <Compile Include="Assets\NGUI\Scripts\Interaction\UIButton.cs" />
@@ -280,97 +224,28 @@
     <Compile Include="Assets\NGUI\Scripts\UI\UITexture.cs" />
     <Compile Include="Assets\NGUI\Scripts\UI\UITooltip.cs" />
     <Compile Include="Assets\NGUI\Scripts\UI\UIViewport.cs" />
-    <Compile Include="Assets\Script\common\DelegateEventDefine.cs" />
-    <Compile Include="Assets\Script\common\FollowTarget.cs" />
-    <Compile Include="Assets\Script\common\GameController.cs" />
-    <Compile Include="Assets\Script\common\MessageManager.cs" />
-    <Compile Include="Assets\Script\common\NPCManager.cs" />
-    <Compile Include="Assets\Script\common\PlayerInfo.cs" />
-    <Compile Include="Assets\Script\mainmenu\knapsack\EquipPopup.cs" />
-    <Compile Include="Assets\Script\mainmenu\knapsack\Inventory.cs" />
-    <Compile Include="Assets\Script\mainmenu\knapsack\InventoryItem.cs" />
-    <Compile Include="Assets\Script\mainmenu\knapsack\InventoryItemUI.cs" />
-    <Compile Include="Assets\Script\mainmenu\knapsack\InventoryManager.cs" />
-    <Compile Include="Assets\Script\mainmenu\knapsack\InventoryPopup.cs" />
-    <Compile Include="Assets\Script\mainmenu\knapsack\InventoryUI.cs" />
-    <Compile Include="Assets\Script\mainmenu\knapsack\Knapsack.cs" />
-    <Compile Include="Assets\Script\mainmenu\knapsack\KnapsackRole.cs" />
-    <Compile Include="Assets\Script\mainmenu\knapsack\KnapsackRoleEquip.cs" />
-    <Compile Include="Assets\Script\mainmenu\knapsack\PowerShow.cs" />
-    <Compile Include="Assets\Script\mainmenu\menu\BottomBar.cs" />
-    <Compile Include="Assets\Script\mainmenu\menu\PlayerBar.cs" />
-    <Compile Include="Assets\Script\mainmenu\menu\PlayerBarTranscript.cs" />
-    <Compile Include="Assets\Script\mainmenu\menu\PlayerStatus.cs" />
-    <Compile Include="Assets\Script\mainmenu\menu\TopBar.cs" />
-    <Compile Include="Assets\Script\mainmenu\shop\ShopUI.cs" />
-    <Compile Include="Assets\Script\mainmenu\shop\ShopUIItem.cs" />
-    <Compile Include="Assets\Script\mainmenu\skill\Skill.cs" />
-    <Compile Include="Assets\Script\mainmenu\skill\SkillItemUI.cs" />
-    <Compile Include="Assets\Script\mainmenu\skill\SkillManager.cs" />
-    <Compile Include="Assets\Script\mainmenu\skill\SkillUI.cs" />
-    <Compile Include="Assets\Script\mainmenu\system\SystemUI.cs" />
-    <Compile Include="Assets\Script\mainmenu\task\NPCDialogUI.cs" />
-    <Compile Include="Assets\Script\mainmenu\task\Task.cs" />
-    <Compile Include="Assets\Script\mainmenu\task\TaskItemUI.cs" />
-    <Compile Include="Assets\Script\mainmenu\task\TaskManager.cs" />
-    <Compile Include="Assets\Script\mainmenu\task\TaskUI.cs" />
-    <Compile Include="Assets\Script\mainmenu\transcriptmap\BtnTranscript.cs" />
-    <Compile Include="Assets\Script\mainmenu\transcriptmap\LoadSceneProgressBar.cs" />
-    <Compile Include="Assets\Script\mainmenu\transcriptmap\TimerDialog.cs" />
-    <Compile Include="Assets\Script\mainmenu\transcriptmap\TranscriptMapDialog.cs" />
-    <Compile Include="Assets\Script\mainmenu\transcriptmap\TranscriptMapUI.cs" />
-    <Compile Include="Assets\Script\photon\PhotonEngine.cs" />
-    <Compile Include="Assets\Script\photon\Vector3Obj.cs" />
-    <Compile Include="Assets\Script\photon\controller\BattleController.cs" />
-    <Compile Include="Assets\Script\photon\controller\BossController.cs" />
-    <Compile Include="Assets\Script\photon\controller\ControllerBase.cs" />
-    <Compile Include="Assets\Script\photon\controller\EnemyController.cs" />
-    <Compile Include="Assets\Script\photon\controller\InventoryItemDBController.cs" />
-    <Compile Include="Assets\Script\photon\controller\LoginController.cs" />
-    <Compile Include="Assets\Script\photon\controller\RegisterController.cs" />
-    <Compile Include="Assets\Script\photon\controller\RoleController.cs" />
-    <Compile Include="Assets\Script\photon\controller\ServerController.cs" />
-    <Compile Include="Assets\Script\photon\controller\SkillDBController.cs" />
-    <Compile Include="Assets\Script\photon\controller\TaskDBController.cs" />
-    <Compile Include="Assets\Script\photon\model\BossAnimationModel.cs" />
-    <Compile Include="Assets\Script\photon\model\CreateEnemyModel.cs" />
-    <Compile Include="Assets\Script\photon\model\EnemyAnimationModel.cs" />
-    <Compile Include="Assets\Script\photon\model\EnemyPositionModel.cs" />
-    <Compile Include="Assets\Script\photon\model\GameStateModel.cs" />
-    <Compile Include="Assets\Script\photon\model\PlayerAnimationModel.cs" />
-    <Compile Include="Assets\Script\photon\model\PlayerMoveAnimationModel.cs" />
-    <Compile Include="Assets\Script\player\Player.cs" />
-    <Compile Include="Assets\Script\player\PlayerAnimation.cs" />
-    <Compile Include="Assets\Script\player\PlayerAttack.cs" />
-    <Compile Include="Assets\Script\player\PlayerAutoMove.cs" />
-    <Compile Include="Assets\Script\player\PlayerEffect.cs" />
-    <Compile Include="Assets\Script\player\PlayerMove.cs" />
-    <Compile Include="Assets\Script\player\PlayerVillageAnimation.cs" />
-    <Compile Include="Assets\Script\player\PlayerVillageMove.cs" />
-    <Compile Include="Assets\Script\start\CharacterShow.cs" />
+    <Compile Include="Assets\Script\god\core\IObject.cs" />
+    <Compile Include="Assets\Script\god\core\Singleton.cs" />
+    <Compile Include="Assets\Script\logic\bag\BagDefines.cs" />
+    <Compile Include="Assets\Script\logic\bag\BagManager.cs" />
+    <Compile Include="Assets\Script\logic\common\GameDefines.cs" />
+    <Compile Include="Assets\Script\logic\item\ItemDefines.cs" />
+    <Compile Include="Assets\Script\logic\obj\ObjectDefines.cs" />
+    <Compile Include="Assets\Script\logic\scene\SceneDefines.cs" />
+    <Compile Include="Assets\Script\logic\skill\Skill.cs" />
+    <Compile Include="Assets\Script\logic\skill\SkillManager.cs" />
+    <Compile Include="Assets\Script\logic\skill\SkillSet.cs" />
+    <Compile Include="Assets\Script\logic\skill\skillBuffDefines.cs" />
+    <Compile Include="Assets\Script\logic\ui\IPanel.cs" />
+    <Compile Include="Assets\Script\logic\ui\LoginPanel.cs" />
+    <Compile Include="Assets\Script\logic\ui\LoginPanelMng.cs" />
+    <Compile Include="Assets\Script\logic\ui\LoginScene.cs" />
+    <Compile Include="Assets\Script\logic\ui\PanelManager.cs" />
+    <Compile Include="Assets\Script\logic\ui\UIControl.cs" />
     <Compile Include="Assets\Script\start\ServerProperty.cs" />
     <Compile Include="Assets\Script\start\StartmenuController.cs" />
-    <Compile Include="Assets\Script\transcript\BloodScreen.cs" />
-    <Compile Include="Assets\Script\transcript\Boss.cs" />
-    <Compile Include="Assets\Script\transcript\BossBullet.cs" />
-    <Compile Include="Assets\Script\transcript\BossHPProgressBar.cs" />
-    <Compile Include="Assets\Script\transcript\Combo.cs" />
-    <Compile Include="Assets\Script\transcript\DeactiveTime.cs" />
-    <Compile Include="Assets\Script\transcript\Enemy.cs" />
-    <Compile Include="Assets\Script\transcript\EnemyTrigger.cs" />
-    <Compile Include="Assets\Script\transcript\GameOverPanel.cs" />
-    <Compile Include="Assets\Script\transcript\HpBarManager.cs" />
-    <Compile Include="Assets\Script\transcript\PlayerSpawn.cs" />
-    <Compile Include="Assets\Script\transcript\SkillButton.cs" />
-    <Compile Include="Assets\Script\transcript\SoundManager.cs" />
-    <Compile Include="Assets\Script\transcript\TranscriptManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\Effects\Shaders\GlowAdditiveTwoColor.shader" />
-    <None Include="Assets\Effects\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\BlendForBloom.shader" />
-    <None Include="Assets\Effects\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\BlurAndFlares.shader" />
-    <None Include="Assets\Effects\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\BrightPassFilter2.shader" />
-    <None Include="Assets\Effects\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\LensFlareCreate.shader" />
     <None Include="Assets\Enemy\Masked Orc\Read Me.txt" />
     <None Include="Assets\Model\Npc_boy\villarger_B_Boy\ReadMe [V 1.4]  02 06.txt" />
     <None Include="Assets\NGUI\Examples\Atlases\Fantasy\Fantasy Font - Normal.txt" />
@@ -389,7 +264,6 @@
     <None Include="Assets\NGUI\Examples\Shaders\Unlit - Depth Cutout.shader" />
     <None Include="Assets\NGUI\Examples\Shaders\Unlit - Depth.shader" />
     <None Include="Assets\NGUI\Examples\Shaders\Unlit - Masked Colored.shader" />
-    <None Include="Assets\NGUI\ReadMe - 3.6.8.txt" />
     <None Include="Assets\NGUI\ReadMe - 3.8.2.txt" />
     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored (TextureClip).shader" />
     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored 1.shader" />
@@ -415,11 +289,6 @@
     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Packed 2.shader" />
     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Packed 3.shader" />
     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Packed.shader" />
-    <None Include="Assets\Plugins\IGSoft_Resources\ToolResources\EffectShader\FXMaker_Mask Additive Tint.shader" />
-    <None Include="Assets\Plugins\IGSoft_Resources\ToolResources\EffectShader\FXMaker_Mask Alpha Blended Tint.shader" />
-    <None Include="Assets\Script\mainmenu\knapsack\InventoryListinfo.txt" />
-    <None Include="Assets\Script\txt\Skill         技能信息清单.txt" />
-    <None Include="Assets\Script\txt\Task 任务信息清单.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2013\UnityVS.CSharp.targets" />
 </Project>
