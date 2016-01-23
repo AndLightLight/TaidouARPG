@@ -12,7 +12,7 @@ public class PanelManager
     private Dictionary<string, IPanel> deleteDic = null;
     protected const string uiCameraPath = "/UI Root/Camera";
 
-    public virtual void Init(/*UIControl.SecendLevelUIType st = UIControl.SecendLevelUIType.None*/)
+    public virtual void Init(UIControl.SecendLevelUIType st = UIControl.SecendLevelUIType.None)
     {
         panelDic = new Dictionary<string, IPanel>();
         secendLevelPanelDic = new Dictionary<string, IPanel>();

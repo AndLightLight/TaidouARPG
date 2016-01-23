@@ -3,7 +3,7 @@ using System.Collections;
 
 public class LoginPanelMng : PanelManager
 {
-    public override void Init(/*UIControl.SecendLevelUIType st = UIControl.SecendLevelUIType.None*/)
+    public override void Init(UIControl.SecendLevelUIType st = UIControl.SecendLevelUIType.None)
     {
         base.Init();
 
