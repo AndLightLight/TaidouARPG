@@ -12,12 +12,17 @@ public class LocalPlayerControl : HumanoidControl
 
 	protected override void SelfStart()
 	{
-        speed = 1.0f;
+        base.SelfStart();
 	}
 
 	protected override void SelfUpdate()
 	{
-
+        base.SelfUpdate();
 	}
+
+    public override void Initialize()
+    {
+        base.Initialize();
+    }
 
 }

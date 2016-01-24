@@ -13,51 +13,40 @@ public class ObjectFactory : Singleton<ObjectFactory>
 			
 			Vector3 pos = new Vector3(x, y, z);
 			//pos.y = Utility.GetTerrainY(pos);
-			Quaternion rotation = Quaternion.Euler(new Vector3(0, 0, 0));
-
+            Quaternion rotation = Quaternion.Euler(new Vector3(0, 0, 0));
 
 			GameObject logicObj = GameObject.Instantiate(Resources.Load("Prefab/Player/Alice/Alice")) as GameObject;
 			logicObj.name = "123456";
 			if (null != logicObj)
 			{
-				GameObject modelObj = logicObj.transform.GetChild(0).gameObject;
+                GameObject modelObj = logicObj.transform.GetChild(0).gameObject;
 
-				// 添加Dummy Player
+                LocalPlayerControl.Instance = logicObj.AddComponent<LocalPlayerControl>();
+
+                NavMeshAgent navMeshAgent = logicObj.AddComponent<NavMeshAgent>();
+                navMeshAgent.radius = 0.5f;
+                navMeshAgent.height = 1.6f;
+                navMeshAgent.baseOffset = -0.1f;
+                navMeshAgent.speed = 1;
+                navMeshAgent.angularSpeed = 360;
+                navMeshAgent.acceleration = 10;
+                navMeshAgent.stoppingDistance = 0.05f;
+                LocalPlayerControl.Instance.m_navMeshAgent = navMeshAgent;
+
 				HumanoidAvatar humanAvatar = modelObj.AddComponent<HumanoidAvatar>();
-				//humanAvatar.dummyType = GameDefines.DummyType.PlayerSelf;
+                humanAvatar.humanoidControl = LocalPlayerControl.Instance;
+                LocalPlayerControl.Instance.m_humanoidAvatar = humanAvatar;
 
-
-				// 添加CharacterController组件
-				/*CharacterController charCtrl = logicObj.AddComponent<CharacterController>();
-				charCtrl.radius = 0f;
-				charCtrl.center = Vector3.up;
-				charCtrl.height = 2f;
-				charCtrl.slopeLimit = 45;
-				charCtrl.stepOffset = 0.3f;*/
-
-				// 添加AIControl
-				logicObj.AddComponent<KeyboardControl>();
-
-				// 添加LocalPlayerControl
-				LocalPlayerControl.Instance = logicObj.AddComponent<LocalPlayerControl>();
-				//LocalPlayerControl.Instance.trail = trail;
+                KeyboardControl control = logicObj.AddComponent<KeyboardControl>();
 
 				//设置Layer
 				//logicObj.layer = LayerMask.NameToLayer("Model");
 
-				// 设置transfom
 				LocalPlayerControl.Instance.SetPosition(pos);
-				//Utility.AdjustYAxis(LocalPlayerControl.Instance);
 				LocalPlayerControl.Instance.SetRotation(rotation);
+                //Utility.AdjustYAxis(LocalPlayerControl.Instance);
 
-				// set PlayerObj
-				humanAvatar.humanoidControl = LocalPlayerControl.Instance;
-
-				/*LocalPlayerControl.Instance.guid = charInfo.PlayerGuid;
-				LocalPlayerControl.Instance.RoleId = charInfo.CharId;
-				LocalPlayerControl.Instance.playerId = charInfo.CharId;
-				LocalPlayerControl.Instance.speed = 0.01f * charInfo.MoveSpeed;
-				LocalPlayerControl.Instance.fightCamp = charInfo.FightCamp;*/
+                LocalPlayerControl.Instance.Initialize();
 
 				return LocalPlayerControl.Instance;
 			}

@@ -67,7 +67,14 @@ public class MainCamControl : MonoBehaviour
 
 	void LateUpdate()
 	{
-		AdjustCamera();
+        try
+        {
+            AdjustCamera();
+        }
+        catch (UnityException ue)
+        {
+            LogManager.Log(ue.ToString(), LogType.Error);
+        }
 	}
 
 	bool force = true;

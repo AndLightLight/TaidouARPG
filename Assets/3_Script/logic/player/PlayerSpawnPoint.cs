@@ -10,8 +10,6 @@ public class PlayerSpawnPoint : MonoBehaviour
         {
             Transform tansform = this.GetComponent<Transform>();
             LocalPlayerControl.Instance = ObjectFactory.CreateLocalPlayer(111, tansform.position.x, tansform.position.y, tansform.position.z);
-            //Transform playerTransform = LocalPlayerControl.Instance.GetComponent<Transform>();
-            //playerTransform.SetParent(tansform);
         }
 	}
 	

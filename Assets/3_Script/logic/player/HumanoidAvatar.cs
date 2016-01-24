@@ -30,10 +30,19 @@ public class HumanoidAvatar : MonoBehaviour
 		return animator;
 	}
 
+    public float Speed
+    {
+        get { return animator.speed; }
+        set { animator.speed = value; }
+    }
+
 	public virtual bool Run
 	{
 		get { return animator.GetBool(ObjectDefines.HASH_RUN); }
-		set { animator.SetBool(ObjectDefines.HASH_RUN, value); }
+		set 
+        { 
+            animator.SetBool(ObjectDefines.HASH_RUN, value); 
+        }
 	}
 
 	public bool Dead
@@ -42,14 +51,9 @@ public class HumanoidAvatar : MonoBehaviour
 		set { animator.SetBool(ObjectDefines.HASH_DEAD, value); }
 	}
 
-	public float Speed
-	{
-		get { return animator.speed; }
-		set { animator.speed = value; }
-	}
-
 	public bool Idle
 	{
+        get { return animator.GetBool(ObjectDefines.HASH_IDLE); }
 		set { animator.SetBool(ObjectDefines.HASH_IDLE, value); }
 	}
 
