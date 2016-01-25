@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-public class Utility
+public class TransformUtility
 {
     public static Transform FindBone(Transform trans, string name)
     {
@@ -156,7 +156,6 @@ public class Utility
 
     public static void LookAtTargetImmediately(IObject src, Vector3 dir)
     {
-        //Vector3 dir = pos - src.GetPosition();
         dir.y = 0f;
         if (dir.sqrMagnitude > 0.01f)
         {

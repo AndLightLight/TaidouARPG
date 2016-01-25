@@ -76,8 +76,6 @@ public class KeyboardControl : MonoBehaviour
             {
                 Vector3 speed = new Vector3(x, 0, z).normalized * LocalPlayerControl.Instance.Speed;
                 LocalPlayerControl.Instance.Move(speed);
-                //CharacterController controller = this.gameObject.GetComponentInChildren<CharacterController>();
-                //controller.SimpleMove(speed);
             }
 
             // skill

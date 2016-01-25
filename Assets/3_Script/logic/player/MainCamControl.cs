@@ -11,16 +11,16 @@ public class MainCamControl : MonoBehaviour
 	public bool bStayPlayerHead = true;
 
 	// camera positon
-	public float Distance = 5;
-	public float Height = 3;
+	public float Distance = 8;
+	public float Height = 8;
 	public float Offset = 0;
 
 	//用于控制摄像机旋转的参数
-	public float XRotate = 3f;
+	public float XRotate = 5f;
 	public float YRotate = 1f;
 
 	// camera lerp parameter
-	public float CameraCatchLerp = 25;
+	public float CameraCatchLerp = 30;
 
 	//Add by dr 2015-03-02 camera fov parameter
 	public float ModifyHeight;
