@@ -28,8 +28,8 @@ public class ObjectFactory : Singleton<ObjectFactory>
                 navMeshAgent.height = 1.6f;
                 navMeshAgent.baseOffset = -0.1f;
                 navMeshAgent.speed = 1;
-                navMeshAgent.angularSpeed = 360;
-                navMeshAgent.acceleration = 10;
+                navMeshAgent.angularSpeed = 0;
+                navMeshAgent.acceleration = 100;
                 navMeshAgent.stoppingDistance = 0.05f;
                 LocalPlayerControl.Instance.m_navMeshAgent = navMeshAgent;
 

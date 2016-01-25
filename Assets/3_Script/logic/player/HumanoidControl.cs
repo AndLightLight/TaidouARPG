@@ -22,21 +22,19 @@ public class HumanoidControl : CreatureControl
         this.Speed = 3.0f;
     }
 
-    public override void Move(Vector3 speed)
+    protected override void OnBeginMove(Vector3 destination)
     {
         m_humanoidAvatar.Run = true;
+
+        TransformUtility.LookAtTargetImmediately(this, destination - this.transform.position);
     }
 
-    public override void MoveTo(Vector3 targetPosition)
-    {
-        base.MoveTo(targetPosition);
-
-        m_humanoidAvatar.Run = true;
-    }
-
-    protected override void OnNavArrive()
+    protected override void OnStopMove()
     {
         m_humanoidAvatar.Run = false;
     }
+
+    
+
 
 }

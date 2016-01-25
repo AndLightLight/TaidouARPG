@@ -22,49 +22,66 @@ public class CreatureControl : IObject
 
     public NavMeshAgent m_navMeshAgent = null;
 
-	protected override void SelfStart()
-	{
-		
-	}
+    protected override void SelfStart()
+    {
 
-	protected override void SelfUpdate()
-	{
+    }
+
+    protected override void SelfUpdate()
+    {
         if (m_isMoving)
         {
-            float dist = (m_navMeshAgent.destination - this.GetPosition()).magnitude;
-            if (dist < 0.15f)
+            float dist = MathUtility.CalcDistance2D(m_navMeshAgent.destination, this.GetPosition());
+            if (dist < ObjectDefines.maxStopDistance)
             {
-                OnNavArrive();
+                OnStopMove();
                 m_isMoving = false;
             }
         }
-        
-	}
+
+    }
 
     public virtual void Initialize()
     {
 
     }
 
-	public virtual bool HandleEvent(int eventValue)
-	{
-		return false;
-	}
+    public virtual bool HandleEvent(int eventValue)
+    {
+        return false;
+    }
 
     public virtual void Move(Vector3 speed)
     {
+        m_isMoving = true;
 
+        speed.Normalize();
+
+        Vector3 destination = this.transform.position + speed;
+
+        m_navMeshAgent.SetDestination(destination);
+
+        OnBeginMove(destination);
     }
 
     public virtual void MoveTo(Vector3 targetPosition)
     {
         m_isMoving = true;
+
         m_navMeshAgent.SetDestination(targetPosition);
+
+        OnBeginMove(targetPosition);
     }
 
-    protected virtual void OnNavArrive()
+    public virtual void StopMove()
     {
-
+        m_isMoving = true;
+        m_navMeshAgent.Stop();
+        OnStopMove();
     }
+
+    protected virtual void OnBeginMove(Vector3 destination) { }
+
+    protected virtual void OnStopMove() { }
 
 }
