@@ -1,7 +1,7 @@
 
 
 
-class Skill
+public class Skill
 {
 	private int m_ownerID;
 
