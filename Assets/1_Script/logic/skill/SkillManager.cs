@@ -17,6 +17,11 @@ namespace SkillSystem
 
 		#region º”‘ÿ°¢–∂‘ÿººƒ‹
 
+		public void Init()
+		{
+			
+		}
+
 		public bool LoadSkill(int ownerID)
 		{
 			if (m_skillSetList.ContainsKey(ownerID))
@@ -57,6 +62,12 @@ namespace SkillSystem
 
 			// to do : check can use ?
 
+			ISkillLogic logic = SkillLogicManager.GetSkillLogic(skill.Template.id);
+			if (logic != null)
+			{
+				;
+			}
+
 			return false;
 		}
 
@@ -67,6 +78,12 @@ namespace SkillSystem
 			{
 				LogManager.Log("UseSkill : skill not exist. id : " + skillParam.m_templateID, LogType.Error);
 				return false;
+			}
+
+			ISkillLogic logic = SkillLogicManager.GetSkillLogic(skill.Template.id);
+			if (logic != null)
+			{
+				logic.OnActive();
 			}
 
 			return false;

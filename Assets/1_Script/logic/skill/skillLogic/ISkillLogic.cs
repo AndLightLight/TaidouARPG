@@ -4,26 +4,11 @@ namespace SkillSystem
 {
 	public class ISkillLogic
 	{
-		public void Active()
-		{
-			this.OnActive();
-		}
+		public virtual void OnActive() { }
 
-		public void Deactive()
-		{
-			this.OnDeactive();
-		}
+		public virtual void OnDeactive() { }
 
-		public void Effect()
-		{
-			this.OnEffect();
-		}
-
-		protected virtual void OnActive() { }
-
-		protected virtual void OnDeactive() { }
-
-		protected virtual void OnEffect() { }
+		public virtual void OnEffect() { }
 
 	}
 }
