@@ -1,19 +1,29 @@
 
 
-public class ISkillLogic
+namespace Skill
 {
-	public void Active()
+	public class ISkillLogic
 	{
-		this.OnActive();
+		public void Active()
+		{
+			this.OnActive();
+		}
+
+		public void Deactive()
+		{
+			this.OnDeactive();
+		}
+
+		public void Effect()
+		{
+			this.OnEffect();
+		}
+
+		protected virtual void OnActive() { }
+
+		protected virtual void OnDeactive() { }
+
+		protected virtual void OnEffect() { }
+
 	}
-
-	public void Deactive()
-	{
-		this.OnDeactive();
-	}
-
-	protected virtual void OnActive() { }
-
-	protected virtual void OnDeactive() { }
-
 }

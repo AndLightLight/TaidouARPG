@@ -1,17 +1,19 @@
 
 
-
-public class Skill
+namespace Skill
 {
-	private int m_ownerID;
-
-	public bool CanTrigger(int target)
+	public class Skill
 	{
-		return true;
-	}
+		private int m_ownerID;
 
-	public bool Trigger(int owner, int target)
-	{
-        return false;
+		public bool CanTrigger(int target)
+		{
+			return true;
+		}
+
+		public bool Trigger(int owner, int target)
+		{
+			return false;
+		}
 	}
 }

@@ -1,6 +1,9 @@
 
 
-public class BuffManager
+namespace Buff
 {
+	public class BuffManager
+	{
 
+	}
 }

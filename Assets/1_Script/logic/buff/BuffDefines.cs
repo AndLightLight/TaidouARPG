@@ -1,7 +1,10 @@
 
-
-namespace BuffDefines
+namespace Buff
 {
-	
 
+	namespace BuffDefines
+	{
+
+
+	}
 }

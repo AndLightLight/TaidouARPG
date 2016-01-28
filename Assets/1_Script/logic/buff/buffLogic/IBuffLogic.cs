@@ -1,19 +1,22 @@
 
 
-public class IBuffLogic
+namespace Buff
 {
-	public void Active() 
+	public class IBuffLogic
 	{
-		this.OnActive();
+		public void Active()
+		{
+			this.OnActive();
+		}
+
+		public void Deactive()
+		{
+			this.OnDeactive();
+		}
+
+		protected virtual void OnActive() { }
+
+		protected virtual void OnDeactive() { }
+
 	}
-
-	public void Deactive()
-	{
-		this.OnDeactive();
-	}
-
-	protected virtual void OnActive() { }
-
-	protected virtual void OnDeactive() { }
-
 }

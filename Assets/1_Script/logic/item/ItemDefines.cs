@@ -45,4 +45,14 @@ namespace ItemDefines
 		Robot,
 	}
 
+	// 使用物品操作的返回值
+	enum UseItemRet
+	{
+		Success = 0,
+		Error = 1,
+		LowCount,
+		InCD,
+		LowLevel,
+	}
+
 }

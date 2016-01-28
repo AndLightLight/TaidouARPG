@@ -3,9 +3,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class SkillSet
-{
-	private List<Skill> skillList;
 
-	private int ownerID;
+namespace Skill
+{
+	public class SkillSet
+	{
+		private List<Skill> skillList;
+
+		private int ownerID;
+	}
 }

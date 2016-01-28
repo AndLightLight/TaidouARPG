@@ -1,6 +1,9 @@
 
 
-public class BuffSet
+namespace Buff
 {
+	public class BuffSet
+	{
 
+	}
 }

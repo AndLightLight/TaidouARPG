@@ -1,21 +1,24 @@
 
 
-namespace SkillDefines
+namespace Skill
 {
-	enum FindingTargetStyle
+	namespace SkillDefines
 	{
-		FTS_Unknown,
-		FTS_One,
-		FTS_Scope,
-		FTS_Entire,
-		FTS_Bullet,
-	};
+		enum FindingTargetStyle
+		{
+			FTS_Unknown,
+			FTS_One,
+			FTS_Scope,
+			FTS_Entire,
+			FTS_Bullet,
+		};
 
-	enum TargetTeamType
-	{
-		TTT_Unknown,
-		TTT_Enemy,
-		TTT_Self,
-	};
+		enum TargetTeamType
+		{
+			TTT_Unknown,
+			TTT_Enemy,
+			TTT_Self,
+		};
 
+	}
 }
