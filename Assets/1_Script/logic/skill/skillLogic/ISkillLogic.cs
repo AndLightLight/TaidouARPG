@@ -1,6 +1,6 @@
 
 
-namespace Skill
+namespace SkillSystem
 {
 	public class ISkillLogic
 	{

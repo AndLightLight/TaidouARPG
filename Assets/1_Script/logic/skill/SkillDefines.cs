@@ -1,8 +1,8 @@
 
 
-namespace Skill
+namespace SkillSystem
 {
-	namespace SkillDefines
+	namespace SkillSystemDefines
 	{
 		enum FindingTargetStyle
 		{

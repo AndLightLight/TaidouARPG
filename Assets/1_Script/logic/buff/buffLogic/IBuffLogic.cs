@@ -1,6 +1,6 @@
 
 
-namespace Buff
+namespace BuffSystem
 {
 	public class IBuffLogic
 	{

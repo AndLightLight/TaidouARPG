@@ -1,8 +1,8 @@
 
-namespace Buff
+namespace BuffSystem
 {
 
-	namespace BuffDefines
+	namespace BuffSystemDefines
 	{
 
 
