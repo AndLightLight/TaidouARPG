@@ -19,6 +19,14 @@ namespace BuffSystem
 			m_buffList.Clear();
 		}
 
+		public void Update(float deltaTime)
+		{
+			foreach(var value in m_buffList.Values)
+			{
+				value.Update(deltaTime);
+			}
+		}
+
 		public int AddBuff(BuffParam param)
 		{
 			return 0;
