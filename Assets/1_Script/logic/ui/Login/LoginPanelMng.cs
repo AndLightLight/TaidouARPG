@@ -14,9 +14,7 @@ public class LoginPanelMng : PanelManager
        // NGUITools.SetActive(UIControl.CameraUIFx.gameObject, false);
 
         // 除角色选择角色之外所有界面的背景界面
-        LoadPanel("UI/Login/LoginBackground", "LoginBg", null, 500);
-
-        LoadPanel("UI/Login/QuickLoginPanel", "QuickLoginPanel", null, 300);
+       /*
         LoadPanel("UI/Login/LoginPanel", "LoginPanel", null, 300);
         LoadPanel("UI/Login/RegisterPanel", "RegisterPanel", null, 300);
         LoadPanel("UI/Login/SelectRolePanel", "SelectRolePanel", null, 300);
@@ -30,7 +28,7 @@ public class LoginPanelMng : PanelManager
         LoadPanel("UI/Main/Notice/FloatWordTipPanel", "FloatWordTipPanel", null, 0);
 
         GameObject roleShowObj = GameObject.Find("RoleShow").gameObject;
-        LoadPanel(@"UI/Login/ProfessionsPresentation", "ProfessionsPresentation", roleShowObj.transform, 0f);
+        LoadPanel(@"UI/Login/ProfessionsPresentation", "ProfessionsPresentation", roleShowObj.transform, 0f);*/
 
         HideAllPanel(true);
 

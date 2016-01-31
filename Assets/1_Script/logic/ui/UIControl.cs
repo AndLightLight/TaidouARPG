@@ -11,9 +11,6 @@ public class UIControl
         Login,
         Loading,
         Main,
-        Wild,
-        Copy,
-        Battle
     }
 
 	public enum SecendLevelUIType
@@ -67,10 +64,10 @@ public class UIControl
                 panelManger = new LoginPanelMng();
                 break;
             case UIType.Loading:
-                //panelManger = new LoadingPanelMng();
+                panelManger = new LoadingPanelMng();
                 break;
 			case UIType.Main:
-                //panelManger = new MainPanelMng();
+                panelManger = new MainPanelMng();
                 break;
             default:
                 //panelManger = new MainPanelMng();
