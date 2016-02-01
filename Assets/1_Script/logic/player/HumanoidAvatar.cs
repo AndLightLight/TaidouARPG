@@ -135,7 +135,7 @@ public class HumanoidAvatar : MonoBehaviour
 	{
 		try
 		{
-			/*SkillBase_Tbl SkillTab = com.jdxk.Configs.ConfigPool.Instance.GetDataByKey<SkillBase_Tbl>(skillBaseID);
+			/*SkillBase_Tbl SkillTab = com.jdxk.Configs.TemplatePool.Instance.GetDataByKey<SkillBase_Tbl>(skillBaseID);
 			if (null == SkillTab)
 			{
 				return false;
@@ -186,15 +186,15 @@ public class HumanoidAvatar : MonoBehaviour
 	public bool canReceiveImapct(int buffId)
 	{
 		return true;
-		/*SkillBuff_Tbl buffTable = com.jdxk.Configs.ConfigPool.Instance.GetDataByKey<com.jdxk.Configs.SkillBuff_Tbl>(buffId);
+		/*SkillBuff_Tbl buffTable = com.jdxk.Configs.TemplatePool.Instance.GetDataByKey<com.jdxk.Configs.SkillBuff_Tbl>(buffId);
 		if (null == buffTable) {
 			return false;
 		}
-		MonsterBase_Tbl monsterBase = com.jdxk.Configs.ConfigPool.Instance.GetDataByKey<MonsterBase_Tbl> (modelId);
+		MonsterBase_Tbl monsterBase = com.jdxk.Configs.TemplatePool.Instance.GetDataByKey<MonsterBase_Tbl> (modelId);
 		if (null == monsterBase) {
 			return false;
 		}
-        MonsterAi_Tbl monsterAi = ConfigPool.Instance.GetDataByKey<MonsterAi_Tbl>(monsterBase.monsterAi);
+        MonsterAi_Tbl monsterAi = TemplatePool.Instance.GetDataByKey<MonsterAi_Tbl>(monsterBase.monsterAi);
 		if (null == monsterAi) {
 			return false;
 		}

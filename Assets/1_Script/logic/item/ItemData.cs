@@ -30,7 +30,7 @@ public class ItemData
 
 		if (null == m_template || m_template.id != templateID)
 		{
-			m_template = ConfigPool.Instance.GetDataByKey<Item_Tbl>(this.m_templateID);
+			m_template = TemplatePool.Instance.GetDataByKey<Item_Tbl>(this.m_templateID);
 		}
 	}
 	

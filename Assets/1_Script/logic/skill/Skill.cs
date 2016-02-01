@@ -21,7 +21,7 @@ namespace SkillSystem
 		public void Init(int ownerID, int templateID)
 		{
 			this.m_ownerID = ownerID;
-			m_template = ConfigPool.Instance.GetDataByKey<Skill_Tbl>(templateID);
+			m_template = TemplatePool.Instance.GetDataByKey<Skill_Tbl>(templateID);
 			if (m_template != null)
 			{
 				m_CDTimeLeft = m_template.CD;

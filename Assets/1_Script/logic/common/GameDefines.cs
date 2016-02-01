@@ -7,7 +7,6 @@ public class GameDefines
 	public static string LayerDefault = "Default";
 	public static string LayerTerrain = "Terrain";
 	public static string LayerNGUI = "NGUI";
-	public static string LayerAirBall = "AirBall";
 	public static string LayerNPC = "NPC";
 	public static string LayerNoSupportTouch = "NoSupportTouch";
 	public static string LayerEnemy = "Enemy";
