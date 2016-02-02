@@ -18,17 +18,20 @@ public class KeyboardControl : MonoBehaviour
 	{
 		try
 		{
-			Debug.LogError("layer" + UICamera.hoveredObject.layer);
-			Debug.LogError("name" + UICamera.hoveredObject.name);
-			Debug.LogError("object" + UICamera.hoveredObject); 
+			/*if (UICamera.hoveredObject != null)
+			{
+				Debug.LogError("layer" + UICamera.hoveredObject.layer);
+				Debug.LogError("name" + UICamera.hoveredObject.name);
+				Debug.LogError("object" + UICamera.hoveredObject);
+			}*/
 
 			// 点击事件处理
-			if (UICamera.hoveredObject == null)
+			if (UICamera.isOverUI == false)
 			{
-				Debug.LogError("1  hover");
+				//Debug.LogError("1  hover");
 				if (Input.GetMouseButtonDown(0))
 				{
-					Debug.LogError("2  mouse");
+					//Debug.LogError("2  mouse");
 					Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
 					RaycastHit hit;
@@ -37,7 +40,7 @@ public class KeyboardControl : MonoBehaviour
 
 					if (Physics.Raycast(ray, out hit, 50, layerMask))
 					{
-						Debug.LogError("3  ray");
+						//Debug.LogError("3  ray");
 						Vector3 hitPoint = hit.point;
 						//if (LayerMask.NameToLayer(GameDefines.LayerNPC) == hit.collider.gameObject.layer)
 						//	BroadCastControl bc = hit.collider.GetComponent<BroadCastControl>();
@@ -106,7 +109,7 @@ public class KeyboardControl : MonoBehaviour
 		}
 		catch (System.Exception e)
 		{
-
+			LogManager.Log(e.ToString(), LogType.Error);
 		}
 	}
 
