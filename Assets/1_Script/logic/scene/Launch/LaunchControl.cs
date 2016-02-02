@@ -92,11 +92,11 @@ public class LaunchControl : MonoBehaviour
 				try
 				{
 					Debug.Log("" + loadedPercent);
-					/*LaunchPanel panel = UIControl.GetPanel<LaunchPanel>("LaunchPanel");
+					LaunchPanel panel = UIControl.GetPanel<LaunchPanel>("LaunchPanel");
 					if (null != panel)
 					{
 						panel.SetLoadingProgress(loadedPercent);
-					}*/
+					}
 				}
 				catch (System.Exception e)
 				{

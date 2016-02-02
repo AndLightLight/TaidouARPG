@@ -33,6 +33,8 @@ public class TemplatePool : Singleton<TemplatePool>
 		LoadRes<Skill_Tbl>("Skill.json");
 		yield return waitForEndOfFrame;
 		LoadRes<Buff_Tbl>("Buff.json");
+		yield return waitForEndOfFrame;
+		LoadRes<Character_Tbl>("Character.json");
 
 
 		/*DataManager.Instance.Init();

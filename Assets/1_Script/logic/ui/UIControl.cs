@@ -60,6 +60,9 @@ public class UIControl
 
         switch (t)
         {
+			case UIType.Launch:
+				panelManger = new LaunchPanelMng();
+				break;
             case UIType.Login:
                 panelManger = new LoginPanelMng();
                 break;
