@@ -6,11 +6,11 @@ using System.Collections.Generic;
 
 namespace SkillSystem
 {
-	class SkillManager
+	class SkillManager : Singleton<SkillManager>
 	{
 		#region Êý¾Ý
 
-		private Dictionary<int, SkillSet> m_skillSetList;
+		private Dictionary<int, SkillSet> m_skillSetList = new Dictionary<int, SkillSet>();
 
 		#endregion
 
@@ -53,10 +53,10 @@ namespace SkillSystem
 
 		public bool CanUseSkill(int ownerID, SkillParam skillParam)
 		{
-			Skill skill = GetSkill(ownerID, skillParam.m_templateID);
+			Skill skill = GetSkill(ownerID, skillParam.templateID);
 			if (null == skill)
 			{
-				LogManager.Log("CanUseSkill : skill not exist. id : " + skillParam.m_templateID, LogType.Error);
+				LogManager.Log("CanUseSkill : skill not exist. id : " + skillParam.templateID, LogType.Error);
 				return false;
 			}
 
@@ -73,17 +73,17 @@ namespace SkillSystem
 
 		public bool UseSkill(int ownerID, SkillParam skillParam)
 		{
-			Skill skill = GetSkill(ownerID, skillParam.m_templateID);
+			Skill skill = GetSkill(ownerID, skillParam.templateID);
 			if (null == skill)
 			{
-				LogManager.Log("UseSkill : skill not exist. id : " + skillParam.m_templateID, LogType.Error);
+				LogManager.Log("UseSkill : skill not exist. id : " + skillParam.templateID, LogType.Error);
 				return false;
 			}
 
 			ISkillLogic logic = SkillLogicManager.GetSkillLogic(skill.Template.id);
 			if (logic != null)
 			{
-				logic.OnActive();
+				logic.OnActive(ownerID, skillParam);
 			}
 
 			return false;

@@ -11,8 +11,8 @@ namespace SkillSystem
 
 	public class SkillParam
 	{
-		public int m_templateID;
-		public Pos m_position = new Pos();
-		public int m_target;
+		public int		templateID;
+		public Pos		position = new Pos();
+		public int		targetID;
 	}
 }

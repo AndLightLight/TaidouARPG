@@ -2,7 +2,7 @@
 
 namespace SkillSystem
 {
-	namespace SkillSystemDefines
+	namespace SkillDefines
 	{
 		enum FindingTargetStyle
 		{

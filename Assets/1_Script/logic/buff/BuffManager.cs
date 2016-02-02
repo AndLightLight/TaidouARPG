@@ -6,9 +6,9 @@ using System.Collections.Generic;
 
 namespace BuffSystem
 {
-	public class BuffManager
+	public class BuffManager : Singleton<BuffManager>
 	{
-		public Dictionary<int, BuffSet> m_buffsetList;
+		public Dictionary<int, BuffSet> m_buffsetList = new Dictionary<int, BuffSet>();
 
 		public void Init()
 		{

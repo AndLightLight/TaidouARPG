@@ -4,7 +4,7 @@ namespace SkillSystem
 {
 	public class ISkillLogic
 	{
-		public virtual void OnActive() { }
+		public virtual void OnActive(int ownerID, SkillParam skillParam) { }
 
 		public virtual void OnDeactive() { }
 

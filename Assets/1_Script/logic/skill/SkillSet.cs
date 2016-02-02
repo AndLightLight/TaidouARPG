@@ -10,7 +10,7 @@ namespace SkillSystem
 	{
 		#region Êý¾Ý
 
-		private Dictionary<int, Skill> m_skillList;
+		private Dictionary<int, Skill> m_skillList = new Dictionary<int, Skill>();
 
 		private int m_ownerID;
 

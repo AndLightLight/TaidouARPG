@@ -58,29 +58,11 @@ using Newtonsoft.Json.Linq;
 		int[] _typePar2 = new int[3];	//typePar2
 		public int[] typePar2 { get { return _typePar2;} }
 
-		int[] _typePar3 = new int[3];	//typePar3
-		public int[] typePar3 { get { return _typePar3;} }
-
-		int[] _typePar4 = new int[3];	//typePar4
-		public int[] typePar4 { get { return _typePar4;} }
-
-		int[] _typePar5 = new int[3];	//typePar5
-		public int[] typePar5 { get { return _typePar5;} }
-
-		int[] _typePar6 = new int[3];	//typePar6
-		public int[] typePar6 { get { return _typePar6;} }
-
 		int[] _beginShow = new int[3];	//beginShow
 		public int[] beginShow { get { return _beginShow;} }
 
 		int[] _endShow = new int[3];	//endShow
 		public int[] endShow { get { return _endShow;} }
-
-		int _isTriggered;	//isTriggered
-		public int isTriggered { get { return _isTriggered;} }
-
-		int[] _triggerBuffId = new int[10];	//triggerBuffId
-		public int[] triggerBuffId { get { return _triggerBuffId;} }
 
 		int _ifMutex;	//ifMutex
 		public int ifMutex { get { return _ifMutex;} }
@@ -91,14 +73,8 @@ using Newtonsoft.Json.Linq;
 		int[] _mutexBuffType = new int[10];	//mutexBuffType
 		public int[] mutexBuffType { get { return _mutexBuffType;} }
 
-		int _clearType;	//clearType
-		public int clearType { get { return _clearType;} }
-
-		int[] _killBuffId = new int[10];	//killBuffId
-		public int[] killBuffId { get { return _killBuffId;} }
-
-		int[] _killBuffType = new int[10];	//killBuffType
-		public int[] killBuffType { get { return _killBuffType;} }
+		int _coverType;	//coverType
+		public int coverType { get { return _coverType;} }
 
 		public override void init(JObject json)
 		{
@@ -206,70 +182,6 @@ using Newtonsoft.Json.Linq;
 					_typePar2[i] = 0;
 			}
 
-			if(json["typePar3"] != null)
-			{
-				int typePar3Count = (json["typePar3"].ToString()).Split(',').Length;
-				for(int i=0; i<3; i++){
-					if(i < typePar3Count)
-						int.TryParse((json["typePar3"].ToString()).Split(',')[i], out _typePar3[i]);
-					else
-						_typePar3[i] = 0;
-				}
-			}
-			else
-			{
-				for(int i=0; i<3; i++)
-					_typePar3[i] = 0;
-			}
-
-			if(json["typePar4"] != null)
-			{
-				int typePar4Count = (json["typePar4"].ToString()).Split(',').Length;
-				for(int i=0; i<3; i++){
-					if(i < typePar4Count)
-						int.TryParse((json["typePar4"].ToString()).Split(',')[i], out _typePar4[i]);
-					else
-						_typePar4[i] = 0;
-				}
-			}
-			else
-			{
-				for(int i=0; i<3; i++)
-					_typePar4[i] = 0;
-			}
-
-			if(json["typePar5"] != null)
-			{
-				int typePar5Count = (json["typePar5"].ToString()).Split(',').Length;
-				for(int i=0; i<3; i++){
-					if(i < typePar5Count)
-						int.TryParse((json["typePar5"].ToString()).Split(',')[i], out _typePar5[i]);
-					else
-						_typePar5[i] = 0;
-				}
-			}
-			else
-			{
-				for(int i=0; i<3; i++)
-					_typePar5[i] = 0;
-			}
-
-			if(json["typePar6"] != null)
-			{
-				int typePar6Count = (json["typePar6"].ToString()).Split(',').Length;
-				for(int i=0; i<3; i++){
-					if(i < typePar6Count)
-						int.TryParse((json["typePar6"].ToString()).Split(',')[i], out _typePar6[i]);
-					else
-						_typePar6[i] = 0;
-				}
-			}
-			else
-			{
-				for(int i=0; i<3; i++)
-					_typePar6[i] = 0;
-			}
-
 			if(json["beginShow"] != null)
 			{
 				int beginShowCount = (json["beginShow"].ToString()).Split(',').Length;
@@ -300,27 +212,6 @@ using Newtonsoft.Json.Linq;
 			{
 				for(int i=0; i<3; i++)
 					_endShow[i] = 0;
-			}
-
-			if(json["isTriggered"] == null)
-				_isTriggered = 0;
-			else
-				int.TryParse(json["isTriggered"].ToString(), out _isTriggered);
-
-			if(json["triggerBuffId"] != null)
-			{
-				int triggerBuffIdCount = (json["triggerBuffId"].ToString()).Split(',').Length;
-				for(int i=0; i<10; i++){
-					if(i < triggerBuffIdCount)
-						int.TryParse((json["triggerBuffId"].ToString()).Split(',')[i], out _triggerBuffId[i]);
-					else
-						_triggerBuffId[i] = 0;
-				}
-			}
-			else
-			{
-				for(int i=0; i<10; i++)
-					_triggerBuffId[i] = 0;
 			}
 
 			if(json["ifMutex"] == null)
@@ -358,43 +249,6 @@ using Newtonsoft.Json.Linq;
 			{
 				for(int i=0; i<10; i++)
 					_mutexBuffType[i] = 0;
-			}
-
-			if(json["clearType"] == null)
-				_clearType = 0;
-			else
-				int.TryParse(json["clearType"].ToString(), out _clearType);
-
-			if(json["killBuffId"] != null)
-			{
-				int killBuffIdCount = (json["killBuffId"].ToString()).Split(',').Length;
-				for(int i=0; i<10; i++){
-					if(i < killBuffIdCount)
-						int.TryParse((json["killBuffId"].ToString()).Split(',')[i], out _killBuffId[i]);
-					else
-						_killBuffId[i] = 0;
-				}
-			}
-			else
-			{
-				for(int i=0; i<10; i++)
-					_killBuffId[i] = 0;
-			}
-
-			if(json["killBuffType"] != null)
-			{
-				int killBuffTypeCount = (json["killBuffType"].ToString()).Split(',').Length;
-				for(int i=0; i<10; i++){
-					if(i < killBuffTypeCount)
-						int.TryParse((json["killBuffType"].ToString()).Split(',')[i], out _killBuffType[i]);
-					else
-						_killBuffType[i] = 0;
-				}
-			}
-			else
-			{
-				for(int i=0; i<10; i++)
-					_killBuffType[i] = 0;
 			}
 
 		}
