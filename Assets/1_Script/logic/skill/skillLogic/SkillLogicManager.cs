@@ -6,7 +6,6 @@ namespace SkillSystem
 	{
 		Min = 0,
 		Buff,
-		Count,
 	}
 
 	public class SkillLogicManager
@@ -19,7 +18,7 @@ namespace SkillSystem
 
 		public static ISkillLogic GetSkillLogic(int id)
 		{
-			if (id > (int)SkillLogicType.Min && id < (int)SkillLogicType.Count)
+			if (id > (int)SkillLogicType.Min && id < SkillLogicType.Count)
 			{
 				return m_logics[id];
 			}

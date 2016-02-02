@@ -4,19 +4,9 @@ namespace BuffSystem
 {
 	public class IBuffLogic
 	{
-		public void Active()
-		{
-			this.OnActive();
-		}
+		public virtual void OnActive() { }
 
-		public void Deactive()
-		{
-			this.OnDeactive();
-		}
-
-		protected virtual void OnActive() { }
-
-		protected virtual void OnDeactive() { }
+		public virtual void OnDeactive() { }
 
 	}
 }
