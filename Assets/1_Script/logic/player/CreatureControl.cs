@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CreatureControl : IObject
+public class CreatureControl : ObjectControl
 {
     private float m_speed = 0.0f;
     public float Speed
@@ -24,11 +24,13 @@ public class CreatureControl : IObject
 
     protected override void SelfStart()
     {
-
+		base.SelfUpdate();
     }
 
     protected override void SelfUpdate()
     {
+		base.SelfUpdate();
+
         if (m_isMoving)
         {
             float dist = MathUtility.CalcDistance2D(m_navMeshAgent.destination, this.GetPosition());
