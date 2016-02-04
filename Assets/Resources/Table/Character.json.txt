@@ -1,0 +1,1 @@
+[{"title":"describe","id":"id","model":"model"},{"title":"name","id":"ID号","model":"模型prefab"},{"title":"type","id":"int","model":"string"},{"title":"default","id":"0","model":"\"\""},{"title":"Alice","id":"101","model":"Prefab/Player/Alice/Alice"}]
